@@ -1,0 +1,280 @@
+\documentclass[a4paper,twoside]{article}
+
+\usepackage{epsfig}
+\usepackage{subcaption}
+\usepackage{calc}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{apalike}
+\usepackage{algorithm2e}
+\usepackage[bottom]{footmisc}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[acronym]{glossaries}
+\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+
+\input{acronyms}
+
+\makeglossaries
+
+\begin{document}
+
+\title{Evaluation of a Human-Guided Machine Learning Tool under Human-Centered Artificial Intelligence Criteria}
+
+\author{\authorname{Diego García-Prieto\sup{1}\orcidAuthor{0000-0002-7461-2961}, Camilo Palazuelos\sup{1}\orcidAuthor{0000-0003-4132-9550} and Rafael Duque\sup{1}\orcidAuthor{0000-0001-8636-3213}}
+\affiliation{\sup{1}Department of Mathematics, Statistics and Computer Science, University of Cantabria, Avenida de Los Castros s/n, Santander, Spain}
+\email{\{diego.garciaprieto, camilo.palazuelos, rafael.duque\}@unican.es}
+}
+
+\keywords{Human-Centered Artificial Intelligence, Human-Guided Machine Learning, Human-Computer Interaction, AutoML}
+
+\abstract{Human-Guided Machine Learning (HGML) proposes actively integrating expert knowledge into the Machine Learning (ML) lifecycle. However, the evaluation of HGML tools under Human-Centered Artificial Intelligence (HCAI) criteria remains scarce in the literature. This paper presents a systematic evaluation of InsuML, an HGML tool designed for users without Artificial Intelligence (AI) expertise, analyzing how responsibilities are distributed between the user and the system throughout the complete ML pipeline. Results demonstrate that InsuML achieves a genuine balance between high automation and high human control, materializing the HCAI framework principles through concrete design decisions: tab-based guided navigation, a pre-training configuration summary and interpretable visualizations. The comparison with existing HGML proposals reveals that InsuML is the only evaluated proposal that combines full pipeline coverage, operational software implementation, accessibility for non-experts and explicit evaluation under HCAI criteria.}
+
+\onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
+
+\section{\uppercase{Introduction}}
+\label{sec:introduction}
+
+The incorporation of \gls{ml} into non-technical professional domains poses a fundamental challenge: how can domain experts leverage the predictive potential of \gls{ml} without requiring specialized training in data science? \Gls{automl} tools have taken significant steps in this direction, but their predominant orientation toward optimizing predictive performance has relegated equally relevant aspects to the background, such as process transparency, the possibility of user intervention and the comprehensibility of results
+\cite{barbudo2023eight}.
+ 
+In parallel, the paradigm of \gls{hcai} has gained relevance as a conceptual and evaluative framework for the design of intelligent systems that place the user at the center of the process, not as a mere recipient of results, but as an active participant with control and interpretation capabilities \cite{shneiderman2022human}. However, the practical application of \gls{hcai} criteria to concrete \gls{automl} tools remains scarce in the literature, with a notable gap between the theoretical frameworks proposed and the empirically evaluated implementations \cite{hartikainen2022human}.
+ 
+This work addresses precisely that gap. We present a systematic evaluation of \gls{insuml}, an \gls{hgml} tool designed specifically for users without \gls{ai} expertise, through the lens of \gls{hcai} criteria. The objective is not so much to measure the predictive performance of the tool but to analyze the extent to which its design and implementation materialize the principles of human control, configurability, transparency and interpretability that \gls{hcai} promotes.
+ 
+The main contribution of this work is therefore methodological and evaluative: an \gls{hcai} analysis process is proposed and applied across the different phases of the \gls{ml} pipeline, identifying how responsibilities are distributed between the user and the automated system, and comparing this distribution with that of other existing \gls{hgml} proposals \cite{gil2019towards,lindauer2024position}.
+ 
+This approach is particularly pertinent given that the intersection between \gls{ai} and \gls{hci} constitutes an area of growing interest in the research community. Designing \gls{ai} systems that are truly usable, transparent and controllable by non-expert users is, ultimately, an \gls{hci} problem as much as it is an \gls{ml} engineering one \cite{xu2019toward}.
+
+The remainder of this paper is structured as follows: Section~\ref{sec:background} reviews the relevant background on \gls{hcai}, \gls{automl} and \gls{hgml}; Section~\ref{sec:tool_description} describes \gls{insuml} and its design principles; Section~\ref{sec:hcai_evaluation} presents the systematic \gls{hcai} evaluation; Section~\ref{sec:discussion} discusses the findings and their implications; and Section~\ref{sec:conclusions} summarizes the conclusions and future work.
+
+
+\section{\uppercase{Background}}
+\label{sec:background}
+
+\subsection{Human-Centered Artificial Intelligence}
+ 
+\Gls{hcai} represents a fundamental reorientation in the design and evaluation of intelligent systems. Unlike traditional approaches that prioritize algorithmic performance as the primary success criterion, \gls{hcai} places the user at the center of the system lifecycle, emphasizing that \gls{ai} should amplify and enhance human capabilities rather than replace them \cite{shneiderman2022human}. In the so-called third wave of \gls{ai}, \gls{hci} professionals play a central role not only in designing user experiences but also in shaping intelligent systems that are ethical, comprehensible and useful \cite{xu2019toward}.
+ 
+A distinctive aspect of this paradigm is its two-dimensional conceptualization. Unlike the classical notion of autonomy, which assumes an inverse relationship between automation and human control, \gls{hcai} treats both dimensions as independent \cite{shneiderman2022human}. This allows conceiving systems that simultaneously combine high levels of automation with meaningful human control, representing the most desirable design space for \gls{ai} tools aimed at non-expert users.
+ 
+\begin{figure*}[!htbp]
+\caption{The two-dimensional \gls{hcai} framework, illustrating the separation
+between Human Control and Computer Automation as independent axes. The
+top-right quadrant represents the target design space for \gls{hcai}-compliant
+systems.}
+\label{fig:HCAI_dimensions}
+\centering
+\resizebox{0.9\columnwidth}{!}{%
+\begin{tikzpicture}[scale=0.6]
+    \draw[->, thick] (0,0) -- (10,0) node[anchor=north, xshift=-2cm]
+        {\scriptsize Computer Automation};
+    \draw[->, thick] (0,0) -- (0,10) node[anchor=south east, rotate=90]
+        {\scriptsize Human Control};
+    \draw[dashed] (0,5) -- (10,5);
+    \draw[dashed] (5,0) -- (5,10);
+    \node[align=center, font=\scriptsize] at (2.5,2.5) {Low \\
+        \vspace{0.2cm} Human Control \\ Low \\
+        \vspace{0.2cm} Computer Automation};
+    \node[align=center, font=\scriptsize] at (7.5,2.5) {Low \\
+        \vspace{0.2cm} Human Control \\ High \\
+        \vspace{0.2cm} Computer Automation};
+    \node[align=center, font=\scriptsize] at (2.5,7.5) {High \\
+        \vspace{0.2cm} Human Control \\ Low \\
+        \vspace{0.2cm} Computer Automation};
+    \node[align=center, font=\scriptsize] at (7.5,7.5) {High \\
+        \vspace{0.2cm} Human Control \\ High \\
+        \vspace{0.2cm} Computer Automation};
+\end{tikzpicture}
+}
+\end{figure*}
+ 
+This duality is articulated around three human control criteria ---ease of use, pipeline configurability and information comprehensibility--- and six automation criteria ---data type detection, data cleaning, feature engineering, model training, hyperparameter optimization and model validation---, forming an evaluative framework applicable to concrete tools. Among the risks that \gls{hcai} seeks to mitigate are algorithmic bias, frequently caused by imbalanced training data, and the lack of transparency inherent to systems that operate as black boxes \cite{chen2023human}.
+ 
+\subsection{AutoML: Automation of the ML Pipeline}
+ 
+\Gls{automl} tools emerged in response to the growing demand for \gls{ml} solutions and the shortage of qualified data scientists \cite{he2021automl}. Their purpose is to democratize access to \gls{ml} by automating complex tasks such as feature engineering, model selection, hyperparameter optimization and evaluation, making advanced analytics accessible to users without deep technical knowledge.
+ 
+However, this predominantly automation-oriented approach frequently operates as a black box, making it difficult for users to understand decision-making processes, incorporate domain-specific knowledge or maintain meaningful control over the modeling process \cite{garouani2023unlocking}. This limitation is not minor: the lack of transparency can conceal underlying biases and prevent the human-AI collaboration necessary to obtain reliable and contextually appropriate results \cite{komala2024fair}.
+ 
+The current market offers both commercial solutions ---such as Google \gls{automl}, Azure Automated \gls{ml} or Amazon SageMaker Autopilot--- and free alternatives ---including Ludwig, AutoGluon, H2O-3 or PyCaret---, designed to meet varying levels of technical expertise. However, the analysis of these tools under \gls{hcai} criteria reveals that none simultaneously maximizes human control and automation, each representing a different balance between accessibility, interpretability and technical sophistication \cite{palazuelos2024non}.
+ 
+\subsection{Human-Guided Machine Learning}
+ 
+\Gls{hgml} constitutes the practical realization of \gls{hcai} principles within the \gls{ml} domain \cite{gil2019towards}. Its fundamental premise is that the active participation of domain experts throughout the \gls{ml} pipeline is not only possible but beneficial, enriching the process with contextual knowledge that algorithms alone cannot incorporate. While \gls{automl} efficiently searches for solutions, expert input through intuitive interfaces enhances the process, resulting in more accurate, efficient and interpretable models \cite{lindauer2024position}.
+ 
+Within the \gls{hgml} framework, this participation is structured around three main areas. In the data preparation phase, users can intervene in variable selection and transformation, the definition of subpopulations of interest and the management of outliers. During model development, the expert can guide the selection of algorithm families, impose constraints on parameters and influence pipeline design. Finally, in the results interpretation phase, users can request specific metrics, compare alternative configurations and analyze model sensitivity to parameter variations.
+ 
+Despite its potential, existing \gls{hgml} proposals present notable limitations in practice. Although some theoretical frameworks cover specific parts of the pipeline, few offer complete software implementations accessible to users without \gls{ai} training \cite{lindauer2024position}, considerably reducing their applicability in real-world contexts.
+ 
+\subsection{HCAI Criteria as an Evaluation Framework}
+ 
+Despite the proliferation of \gls{automl} tools, their systematic evaluation under \gls{hcai} criteria remains infrequent. Most comparative studies focus on predictive performance metrics, relegating to the background aspects such as usability for non-expert users, the transparency of automated decisions or the actual degree of control the system grants to the user \cite{hartikainen2022human}.
+ 
+Applying \gls{hcai} criteria as an evaluative framework allows going beyond performance and answering questions such as: in which pipeline phases does the user have real intervention capacity?, which decisions remain opaque or beyond their reach?, how are responsibilities distributed between the human and the system? This type of analysis is particularly valuable for guiding the design of future tools toward a more balanced and transparent human-machine collaboration, and represents a line of work explicitly called for by the research community \cite{lindauer2024position,wu2022survey}.
+
+
+\section{\uppercase{InsuML: Tool Description}}
+\label{sec:tool_description}
+ 
+\subsection{Overview, Design Principles and Interface}
+ 
+\Gls{insuml} is a software application designed to facilitate the construction of predictive models by users without \gls{ai} expertise. Its design rests on a central premise: that domain knowledge and expert intuition are valuable assets that must be explicitly integrated into the \gls{ml} process, rather than being displaced by automation. To this end, the tool adopts the \gls{hgml} paradigm as its structuring principle, combining the power of an \gls{automl} engine with a guided \gls{gui} that makes every pipeline decision visible and controllable \cite{shneiderman2022human}.
+
+The interface is organized through a tab-based navigation system that guides users sequentially through the complete \gls{ml} pipeline without requiring programming skills. The workflow begins with a welcome screen that contextualizes the process, followed by dedicated tabs for dataset loading, variable configuration, training parameter selection and results visualization. Figure~\ref{fig:interface} shows the feature configuration tab, illustrating the dataset preview, variable assignment controls and missing value handling options.
+
+% Figure~\ref{fig:interface}
+
+During the configuration phase, users can remove irrelevant variables, assign input or output roles to each column, select evaluation metrics and define strategies for handling missing values. Before training begins, the system presents a summary of all selected options alongside applied default values, offering the user a complete and transparent view of the configuration to be executed. Once training is complete, results are presented through interactive graphics and confusion matrices that facilitate interpretation without requiring advanced statistical expertise. This design transforms habitually opaque technical decisions into explicit and comprehensible choices for the user, addressing one of the most frequent criticisms directed at conventional \gls{automl} systems \cite{garouani2023unlocking}.
+
+\subsection{Architecture}
+ 
+\Gls{insuml} is built on three modular layers: an Interface Layer implemented in Python using Tkinter, which manages user interaction and input validation; a Core Logic Layer that translates user selections into technical configurations and automatically generates the necessary configuration files; and an \gls{automl} Layer based on the Ludwig engine, which handles training, hyperparameter optimization and model evaluation autonomously. This separation ensures that all automated decisions can be traced and understood, contributing to bias mitigation and responsible \gls{ai} deployment \cite{chen2023human}. The modular design also allows the underlying \gls{automl} engine to be replaced without altering the user experience, ensuring flexibility and longevity.
+
+
+\section{\uppercase{HCAI Evaluation of InsuML}}
+\label{sec:hcai_evaluation}
+ 
+This section constitutes the central core of the paper. The objective is to systematically analyze the extent to which \gls{insuml} materializes the principles of the \gls{hcai} framework, examining how responsibilities are distributed between the user and the automated system throughout the different phases of the \gls{ml} pipeline.
+
+\subsection{Evaluation Methodology}
+ 
+The evaluation is structured around the two dimensions of the \gls{hcai} framework: human control and automation. For each phase of the \gls{ml} pipeline, the decisions corresponding to the user and those the system executes autonomously are identified, analyzing the resulting balance and its adequacy to human-centered design principles.
+
+The analysis covers nine phases organized into three areas: data use (variable selection, variable requirements and instance selection), model development (model selection, parameter settings and solution design) and model interpretation (model assessment, model comparison and parameter comparison). This structure follows the \gls{hgml} framework proposed by Gil et al. \cite{gil2019towards} and subsequently extended by Lindauer et al. \cite{lindauer2024position}, which also allows situating \gls{insuml} in the context of existing proposals.
+
+Additionally, three transversal human control criteria are evaluated ---ease of use, pipeline configurability and information interpretability--- and six automation criteria ---data type detection, data cleaning, feature engineering, model training, hyperparameter optimization and model validation---, following the \gls{hcai} framework operationalization previously applied to the comparative analysis of \gls{automl} tools \cite{palazuelos2024non}.
+
+\subsection{Human Control throughout the Pipeline}
+ 
+\textbf{Data use.} In the variable selection phase, the user exercises direct and explicit control: they can review the complete dataset, identify irrelevant variables for their specific problem and remove them before training. This domain knowledge-based prioritization capability is precisely the type of intervention that conventional \gls{automl} systems do not contemplate. Regarding variable requirements, the user can explicitly designate which columns will act as input variables and which will be the target variable, as well as specify the problem type ---classification or regression---. Instance selection, in turn, allows the user to define treatment strategies for missing values, choosing between the removal of incomplete rows or imputation by column mean, a decision with direct implications for the quality and representativeness of the resulting model.
+
+\textbf{Model development.} Model type selection is delegated to the Ludwig engine, which automatically chooses the most appropriate architecture based on dataset characteristics and problem type. However, the user can indirectly influence this through the configuration of training parameters, such as maximum training time or preferred evaluation metrics. Solution design remains partially in the user's hands through the preprocessing decisions made in earlier phases, whose impact on the complete pipeline is visible thanks to the configuration summary the system presents before training begins.
+
+\textbf{Model interpretation.} Once training is complete, \gls{insuml} presents results through interactive visualizations including learning curves, confusion matrices and performance metrics adapted to the task type. This set of resources facilitates the user evaluating the model from their domain perspective, identifying error patterns and making informed decisions about whether the model is suitable for their application. The possibility of reconfiguring the pipeline and retraining the model also enables an implicit comparison between alternative configurations, fostering the iterative exploration characteristic of the \gls{hgml} approach.
+
+\subsection{Pipeline Automation}
+ 
+The Ludwig engine autonomously manages a broad set of technical tasks that would otherwise require advanced expertise. Automatic data type detection allows the system to infer whether each variable is numerical, categorical or of another type, applying appropriate encoders and transformations without user intervention. Data cleaning, beyond the user-configurable options, includes automatic normalization mechanisms and categorical variable encoding. Model training is executed entirely in an automated fashion, including neural architecture selection, hyperparameter optimization within predefined ranges and validation using standard techniques. All of this occurs transparently for the user, who receives continuous feedback on training progress without needing to intervene in the technical details.
+
+\subsection{Balance between Human Control and Automation}
+
+Table~\ref{tab:balance} synthesizes the distribution of responsibilities between the user and the system across the nine pipeline phases, illustrating the balance achieved by \gls{insuml} between human control and automation.
+
+\begin{table*}[h]
+\caption{Distribution of responsibilities between user and system in each
+phase of the \gls{ml} pipeline in \gls{insuml}.}
+\label{tab:balance}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{l p{6cm} p{6cm}}
+\toprule
+\textbf{Pipeline phase} & \textbf{Human control} & \textbf{Automation} \\
+\midrule
+Variable selection & The user prioritizes variables, proposes new combinations,
+adjusts context and identifies missing data & The system infers relevant
+features and performs automatic imputation during preprocessing \\
+Variable requirements & The expert specifies inclusion or exclusion of
+variables based on domain knowledge of their predictive strength & The system
+enforces include/exclude rules defined in the configuration and validates
+dataset consistency \\
+Instance selection & The user defines subpopulations, selects or removes
+outliers and sets the partitioning strategy & The system performs automatic
+dataset splitting, balancing and cross-validation by default \\
+Model selection & The user indicates preferred model types & The system builds
+and evaluates candidate architectures \\
+Parameter settings & The expert specifies parameter values based on domain
+knowledge & The system searches and optimizes hyperparameters within declared
+ranges \\
+Solution design & The user modifies preprocessing, feature generation,
+imputation and pipeline design & The system constructs complete pipelines
+(encoders, combiners, preprocessing) \\
+Model assessment & The user requests specific metrics & The system computes
+and reports metrics, training curves and diagnostics automatically \\
+Model comparison & The user selects models, datasets or configurations to
+compare & The system manages multiple experiments and provides comparative
+results and visualizations \\
+Parameter comparison & The user identifies parameters for targeted variation &
+The system runs ablation or sensitivity tests on parameter variations and
+reports performance impact \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+ 
+The analysis reveals that \gls{insuml} achieves a genuine balance between both dimensions. Decisions requiring domain knowledge ---which variables are relevant, what type of problem is being addressed, what level of error is acceptable--- fall explicitly on the user. Tasks demanding technical \gls{ml} expertise ---hyperparameter optimization, architecture selection, cross-validation--- are managed autonomously by the system. This distribution is not coincidental but the result of deliberate design decisions oriented toward placing the tool in the high automation and high human control quadrant of the \gls{hcai} framework \cite{shneiderman2022human}.
+
+\subsection{Evaluation of Transversal Criteria}
+
+Beyond the phase-by-phase analysis, the evaluation of the \gls{hcai} framework's transversal criteria offers a complementary view of the degree of compliance with human-centered design principles.
+
+Regarding \textbf{ease of use}, the tab-based guided navigation, the absence of programming requirements and the progressive presentation of options significantly reduce the entry barrier for users without technical training. Automatic input validation and the comprehensible error messaging system further contribute to a robust and accessible user experience.
+
+With respect to \textbf{pipeline configurability}, \gls{insuml} offers a medium-high level of flexibility. Users can customize key aspects of the process ---variables, metrics, imputation strategies, training time--- without needing to modify code. However, the dependency on the Ludwig engine imposes limitations on the configuration of model architectures at a low level, an aspect that represents a future improvement opportunity.
+
+Regarding \textbf{information interpretability}, the system presents results through interactive visualizations and accessible language, avoiding the direct exposure of technical parameters to the user. The pre-training configuration summary is a particularly valuable element, as it allows the user to verify and understand exactly what process will be executed before initiating it, transforming automated decisions into transparent and verifiable options \cite{garouani2023unlocking}.
+
+
+\section{\uppercase{Discussion}}
+\label{sec:discussion}
+ 
+\subsection{InsuML in the AutoML and HGML Landscape}
+ 
+The \gls{hcai} evaluation presented in the previous section allows \gls{insuml} to be situated within the current \gls{automl} landscape from a perspective that goes beyond predictive performance. Tools such as AutoGluon or H2O-3 achieve more competitive results on most benchmarks, but their predominant orientation toward technically proficient users, the absence of guided workflows and the limited interpretability of their interfaces place them in a design space different from that advocated by \gls{hcai} \cite{lindauer2024position}. \Gls{insuml} does not compete in the same space as these tools: it competes in the human-centered design space, where accessibility, transparency and meaningful control are the primary success criteria.
+
+The comparison with existing \gls{hgml} proposals further reinforces this distinction. Works such as those of Gil et al. \cite{gil2019towards} and Lee et al. \cite{lee2020human} establish comprehensive theoretical frameworks covering the full \gls{ml} pipeline from a human-centered perspective, but
+lack software implementation and have not been evaluated under \gls{hcai} criteria. The HAMLET framework of Francia et al. \cite{francia2023hamlet}, while providing partial software support, is specifically oriented toward \gls{ai} experts, limiting its applicability to the non-technical user profile that \gls{hgml} aims to reach. Lindauer et al. \cite{lindauer2024position} explicitly call for more human-centered \gls{automl} tools, acknowledging that current proposals insufficiently address usability, interpretability and customization criteria. \Gls{insuml} is the only proposal that combines full pipeline coverage, operational software implementation, accessibility for non-AI users and explicit evaluation under \gls{hcai} criteria.
+
+\subsection{Design Implications for Accessible ML Interfaces}
+
+The \gls{hcai} evaluation of \gls{insuml} yields transferable insights for the design of future \gls{ml} tools targeting non-expert users. First, sequential tab-based navigation proves to be an effective interaction pattern for guiding users through complex processes without overwhelming them with simultaneous technical options. The structured progression reduces cognitive load and allows users to focus on domain decisions while delegating technical ones to the system.
+
+Second, the pre-training configuration summary emerges as a particularly valuable design element from the \gls{hcai} perspective. This mechanism transforms a habitually opaque transition ---from user input to automated process--- into an explicit verification checkpoint that fosters understanding
+and trust, directly addressing the transparency deficit identified as one of the main shortcomings of current \gls{automl} systems \cite{garouani2023unlocking}.
+
+Third, the architectural separation between the interface and core logic layers carries ethical implications beyond its technical advantages. By making the translation between user intentions and technical parameters explicit, the system reduces the risk of inadvertent perpetuation of data biases, a problem frequently highlighted in the responsible \gls{ai} literature \cite{chen2023human,komala2024fair}.
+
+\subsection{Limitations and Future Work}
+
+The evaluation presented in this work is not without limitations. Although \gls{insuml} was co-designed with non-expert users, the current work lacks formal usability studies measuring empirical metrics such as task completion time, error rates or user satisfaction with actual domain specialists
+performing realistic modeling tasks. This empirical validation constitutes the most immediate priority for future work.
+
+Additionally, \gls{insuml}'s current explainability capabilities are limited. Incorporating \gls{xai} techniques such as \gls{shap} or \gls{lime} \cite{salih2025perspective} would considerably enrich the model interpretation phase, enabling users to understand not only global model performance but also
+which variables contribute to each prediction and why. Finally, experiments have been restricted to moderately sized datasets in structured tabular format; extending the tool toward larger-scale datasets and heterogeneous data sources ---text, images, time series--- would significantly broaden its real-world applicability while maintaining the human-centered design principles that articulate its development.
+
+
+\section{\uppercase{Conclusions}}
+\label{sec:conclusions}
+
+This paper has presented an evaluation of \gls{insuml} under the criteria of the \gls{hcai} framework, with the objective of analyzing the extent to which an \gls{hgml} tool can simultaneously materialize high levels of automation and meaningful human control. The evaluation developed goes
+beyond the predictive performance metrics customary in the \gls{automl} literature, proposing an evaluative approach centered on the distribution of responsibilities between the user and the system throughout the complete \gls{ml} pipeline.
+
+The results of the analysis demonstrate that \gls{insuml} achieves a genuine balance between both dimensions of the \gls{hcai} framework. Decisions requiring domain knowledge fall explicitly on the user, while tasks demanding advanced technical expertise are managed autonomously by the system. This
+distribution is not coincidental but the result of deliberate design decisions, manifested in concrete interface elements such as tab-based guided navigation, the pre-training configuration summary and the presentation of results through accessible visualizations.
+
+The comparison with existing \gls{hgml} proposals reveals that \gls{insuml} is the only one that combines full pipeline coverage, operational software implementation, accessibility for users without \gls{ai} training and explicit evaluation under \gls{hcai} criteria. This combination represents a concrete contribution to the democratization of \gls{ml}, not only in terms of technical capabilities but also in terms of responsibility: by making every process decision visible and controllable, the tool enables domain experts to apply their contextual knowledge to prevent problematic algorithmic behaviors.
+
+From the \gls{hci} perspective, this work illustrates that interface design for \gls{ml} systems is not a secondary concern but a determining factor for human-AI collaboration to be effective and responsible. Interface design decisions ---how options are presented, in what order, with what level of
+technical detail--- have direct implications for the degree of real control the user exercises over the system and, by extension, for the quality and reliability of the resulting models.
+
+As future work, the most immediate priority is conducting formal usability studies with real users from different domains, to empirically validate whether the current design achieves its accessibility and control objectives. The incorporation of advanced explainability techniques and the extension toward heterogeneous data sources represent complementary development lines that would broaden the scope and applicability of the tool, maintaining human-centered design principles as the articulating axis throughout.
+
+In summary, this work contributes to consolidating \gls{hcai} evaluation as a necessary ---and not optional--- dimension in the analysis of \gls{automl} tools, and demonstrates that high automation and high human control are not opposing objectives but complementary ones when interaction design is approached with rigor and with the non-expert user as the protagonist.
+
+
+\section*{\uppercase{Acknowledgements}}
+
+This work has been supported by grant PID2023-146243OB-I00 funded by MICIU/AEI/10.13039/501100011033 and by ``ERDF/EU''.
+
+
+\bibliographystyle{apalike}
+{\small
+\bibliography{bibliography}}
+
+\end{document}
+
