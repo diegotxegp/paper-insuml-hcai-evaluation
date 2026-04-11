@@ -114,23 +114,20 @@ Within the \gls{hgml} framework, this participation is structured around three m
 Despite its potential, existing \gls{hgml} proposals present notable limitations in practice. Although some theoretical frameworks cover specific parts of the pipeline, few offer complete software implementations accessible to users without \gls{ai} training, considerably reducing their applicability in real-world contexts \cite{gil2019towards,francia2023hamlet,lee2020human,lindauer2024position}.
 
 
-
-
 \section{\uppercase{A Methodology for Evaluating HGML Tools under HCAI Criteria}}
 \label{sec:methodology}
 
-The methodology is structured around the two independent dimensions of the
-\gls{hcai} framework \cite{shneiderman2022human}, each decomposed into
-measurable criteria specific to the \gls{hgml} domain, and applied across
-nine pipeline phases derived from the \gls{hgml} framework of Gil et al.
-\cite{gil2019towards}: \textbf{Data use} (variable selection, variable
-requirements, instance selection), \textbf{Model development} (model
-selection, parameter settings, solution design) and \textbf{Model
-interpretation} (model assessment, model comparison, parameter comparison).
-This phase structure ensures coverage of the complete \gls{ml} lifecycle and
-provides a common reference frame for comparing different \gls{hgml} tools.
+To apply the methodology, the evaluator systematically traverses the tool's
+complete workflow, documents every decision point encountered by the user and
+every automated action performed by the system, assesses the degree to which
+each pipeline phase satisfies the human control and automation criteria, and
+computes two aggregate scores that position the tool within the \gls{hcai}
+two-dimensional framework. The following subsections define the evaluation
+criteria, the theoretical reference framework that guides the assessment, and
+the instrument used to formalize and quantify the results.
 
 \subsection{Evaluation Dimensions and Criteria}
+\label{subsec:dimensions}
 
 \textbf{Human control dimension} is assessed through three criteria:
 (i)~\textit{ease of use}, examining whether the tool can be operated by users
@@ -145,7 +142,7 @@ users.
 \textbf{Computer automation dimension} is assessed through six criteria
 corresponding to the core technical tasks of the \gls{ml} pipeline:
 (i)~\textit{data type detection}, examining whether the system automatically
-infers the nature of each variable ---numerical, categorical, temporal or
+infers the nature of each variable ---binary, number, category, text or
 other--- and applies appropriate encoders without requiring explicit user
 specification; (ii)~\textit{data cleaning}, evaluating the extent to which
 the system autonomously handles missing values, normalizes distributions and
@@ -162,7 +159,8 @@ within predefined or inferred ranges without user involvement; and
 applies standard validation procedures ---such as cross-validation or hold-out
 splitting--- and reports diagnostic metrics.
 
-\subsection{Responsibility Assignment and the Compliance Matrix}
+\subsection{Theoretical Responsibility Framework}
+\label{subsec:responsibility}
 
 The central analytical operation of the methodology is the assignment of each
 decision within a pipeline phase to one of three responsibility categories:
@@ -176,10 +174,12 @@ within those bounds, e.g., the user selects evaluation metrics and the system
 computes and reports them).
 
 Table~\ref{tab:balance} presents the theoretical responsibility distribution
-framework derived from the \gls{hgml} pipeline model, describing the expected
-allocation of decisions between user and system in an \gls{hgml} tool that
-fully realizes \gls{hcai} principles. This table serves as the reference
-framework against which any \gls{hgml} tool can be evaluated.
+derived from the \gls{hgml} pipeline model \cite{gil2019towards} and the
+\gls{hcai} principles \cite{shneiderman2022human}, describing the expected
+allocation of decisions in an \gls{hgml} tool that fully realizes both
+frameworks. During the interface walkthrough, the evaluator contrasts the
+observed behavior of the tool against this reference to decide whether each
+criterion is fully met, partially met, or not met in each phase.
 
 \begin{table*}[h]
 \caption{Theoretical responsibility distribution framework for \gls{hgml}
@@ -223,135 +223,69 @@ reports performance impact \\
 }
 \end{table*}
 
-These assignments are formalized through the \gls{hcai}-\gls{hgml} Compliance
-Matrix, which crosses the nine pipeline phases (rows) against the nine
-evaluation criteria (columns): three human control criteria and six automation
-criteria. For each cell, the evaluator records whether the tool \textbf{fully
-meets} the criterion in that phase (\checkmark), \textbf{partially meets} it
-($\sim$), or \textbf{does not meet it or it is not applicable} (---).
-Table~\ref{tab:matrix_example} illustrates the structure of the matrix with a
-minimal example showing how three hypothetical pipeline phases would be
-populated.
+\subsection{The HCAI-HGML Compliance Matrix}
+\label{subsec:matrix}
 
-\begin{table*}[h]
-\caption{Illustrative example of the \gls{hcai}-\gls{hgml} Compliance Matrix
-structure. \checkmark~=~fully met; $\sim$~=~partially met;
----~=~not met or not applicable.}
-\label{tab:matrix_example}
+The \gls{hcai}-\gls{hgml} Compliance Matrix crosses the nine pipeline phases
+(rows) against the nine evaluation criteria (columns): three human control
+criteria and six automation criteria. Guided by the reference in
+Table~\ref{tab:balance}, the evaluator records for each cell whether the tool
+\textbf{fully meets} the criterion in that phase (\checkmark),
+\textbf{partially meets} it ($\sim$), or \textbf{does not meet it or it is
+not applicable} (---).
+
+Once the matrix is fully populated, two aggregate scores are computed. Let
+$n = 9$ be the number of pipeline phases, $c_{HC} = 3$ the number of human
+control criteria and $c_{A} = 6$ the number of automation criteria. For each
+cell, a value of $1$ is assigned to \checkmark, $0.5$ to $\sim$, and $0$ to
+---. The \textbf{Human Control Score} and \textbf{Automation Score} are
+defined as:
+
+\begin{equation}
+    S_{HC} = \frac{1}{n \cdot c_{HC}} \sum_{i=1}^{n} \sum_{j=1}^{c_{HC}} v_{ij}
+    \label{eq:shc}
+\end{equation}
+
+\begin{equation}
+    S_{A} = \frac{1}{n \cdot c_{A}} \sum_{i=1}^{n} \sum_{j=1}^{c_{A}} v_{ij}
+    \label{eq:sa}
+\end{equation}
+
+where $v_{ij} \in \{0, 0.5, 1\}$ is the value assigned to cell $(i,j)$.
+Both scores range from 0 to~1 and together determine the \gls{hcai} quadrant
+of the tool under evaluation, as shown in Table~\ref{tab:quadrants}.
+
+\begin{table*}[ht]
+\caption{\gls{hcai} quadrant classification based on $S_{HC}$ and $S_{A}$.}
+\label{tab:quadrants}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{l ccc cccccc}
+\begin{tabular}{lllp{6cm}}
 \toprule
- & \multicolumn{3}{c}{\textbf{Human Control}} &
-   \multicolumn{6}{c}{\textbf{Automation}} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-10}
-\textbf{Pipeline phase}
-& \makecell{\textbf{Ease of}\\\textbf{Use}}
-& \makecell{\textbf{Pipeline}\\\textbf{Config.}}
-& \makecell{\textbf{Information}\\\textbf{Interp.}}
-& \makecell{\textbf{Data Type}\\\textbf{Detection}}
-& \makecell{\textbf{Data}\\\textbf{Cleaning}}
-& \makecell{\textbf{Feature}\\\textbf{Eng.}}
-& \makecell{\textbf{Model}\\\textbf{Training}}
-& \makecell{\textbf{Hyperparam.}\\\textbf{Optim.}}
-& \makecell{\textbf{Model}\\\textbf{Validation}} \\
+\textbf{Quadrant} & $S_{HC}$ & $S_{A}$ & \textbf{Interpretation} \\
 \midrule
-Variable selection  & \checkmark & \checkmark & \checkmark & \checkmark & $\sim$ & --- & --- & --- & --- \\
-Model selection     & \checkmark & $\sim$     & $\sim$     & ---        & ---    & --- & \checkmark & \checkmark & --- \\
-Model assessment    & \checkmark & \checkmark & \checkmark & ---        & ---    & --- & ---        & ---        & \checkmark \\
-\midrule
-\textit{$\ldots$} & \multicolumn{9}{c}{\textit{(remaining six phases populated analogously)}} \\
+Optimal (upper right)                    & $> 0.5$ & $> 0.5$ & High human control and high automation: target \gls{hcai} profile \\
+Automation without control (upper left)  & $\leq 0.5$ & $> 0.5$ & Highly automated but opaque to the user \\
+Control without automation (lower right) & $> 0.5$ & $\leq 0.5$ & User-driven but insufficiently automated \\
+Deficient (lower left)                   & $\leq 0.5$ & $\leq 0.5$ & Neither adequate control nor automation \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
 \end{table*}
 
-The complete matrix, once populated across all nine phases, yields a
-structured \gls{hcai} profile of the tool under evaluation.
+Beyond quadrant classification, the \textbf{distance to the ideal point}
+$(1, 1)$ provides a continuous measure of proximity to a perfect
+\gls{hcai}-compliant \gls{hgml} tool:
 
-\subsection{Evaluation Procedure and Quadrant Positioning}
-\label{subsec:procedure}
+\begin{equation}
+    D = \sqrt{(1 - S_{HC})^2 + (1 - S_{A})^2}
+    \label{eq:distance}
+\end{equation}
 
-The application of the methodology constitutes an expert-based heuristic
-evaluation \cite{lazar2017research}, proceeding in four steps:
-
-\begin{enumerate}
-    \item \textbf{Interface walkthrough:} a systematic traversal of the
-    tool's complete workflow, documenting every decision point encountered by
-    the user and every automated action performed by the system.
-
-    \item \textbf{Phase-by-phase responsibility mapping:} for each of the
-    nine pipeline phases, decisions are classified according to the
-    responsibility categories defined above, producing a structured
-    responsibility distribution (see Table~\ref{tab:balance} for the
-    theoretical reference framework).
-
-    \item \textbf{Compliance Matrix completion:} the nine criteria are
-    evaluated based on the evidence collected during the walkthrough,
-    populating the \gls{hcai}-\gls{hgml} Compliance Matrix.
-
-    \item \textbf{Quadrant positioning:} two aggregate scores are computed
-    from the completed matrix to position the tool within the \gls{hcai}
-    two-dimensional framework. Let $n = 9$ be the number of pipeline phases,
-    $c_{HC} = 3$ the number of human control criteria and $c_{A} = 6$ the
-    number of automation criteria. For each cell, a value of $1$ is assigned
-    to \checkmark, $0.5$ to $\sim$, and $0$ to ---. The \textbf{Human
-    Control Score} and \textbf{Automation Score} are defined as:
-
-    \begin{equation}
-        S_{HC} = \frac{1}{n \cdot c_{HC}} \sum_{i=1}^{n} \sum_{j=1}^{c_{HC}} v_{ij}
-        \label{eq:shc}
-    \end{equation}
-
-    \begin{equation}
-        S_{A} = \frac{1}{n \cdot c_{A}} \sum_{i=1}^{n} \sum_{j=1}^{c_{A}} v_{ij}
-        \label{eq:sa}
-    \end{equation}
-
-    where $v_{ij} \in \{0, 0.5, 1\}$ is the value assigned to cell $(i,j)$
-    of the matrix. Both scores range from 0 to~1 and together determine the
-    \gls{hcai} quadrant of the tool under evaluation, as shown in
-    Table~\ref{tab:quadrants}.
-
-    \begin{table*}[h]
-    \caption{\gls{hcai} quadrant classification based on $S_{HC}$ and $S_{A}$.}
-    \label{tab:quadrants}
-    \centering
-    \begin{tabular}{lllp{4.5cm}}
-    \toprule
-    \textbf{Quadrant} & $S_{HC}$ & $S_{A}$ & \textbf{Interpretation} \\
-    \midrule
-    Optimal (upper right)       & $> 0.5$ & $> 0.5$ & High human control and high automation: target \gls{hcai} profile \\
-    Automation without control (upper left)  & $\leq 0.5$ & $> 0.5$ & Highly automated but opaque to the user \\
-    Control without automation (lower right) & $> 0.5$ & $\leq 0.5$ & User-driven but insufficiently automated \\
-    Deficient (lower left)      & $\leq 0.5$ & $\leq 0.5$ & Neither adequate control nor automation \\
-    \bottomrule
-    \end{tabular}
-    \end{table*}
-
-    Beyond quadrant classification, the \textbf{distance to the ideal point}
-    $(1, 1)$ provides a continuous measure of proximity to a perfect
-    \gls{hcai}-compliant \gls{hgml} tool:
-
-    \begin{equation}
-        D = \sqrt{(1 - S_{HC})^2 + (1 - S_{A})^2}
-        \label{eq:distance}
-    \end{equation}
-
-    $D$ ranges from $0$ (perfect compliance) to $\sqrt{2} \approx 1.41$
-    (worst case). A tool in the optimal quadrant with a low $D$ value is
-    close to the ideal; a tool with a high $D$ value, even within the optimal
-    quadrant, reveals specific dimensions that require improvement. The
-    individual scores $S_{HC}$ and $S_{A}$ further indicate which dimension
-    ---human control or automation--- constitutes the primary gap.
-\end{enumerate}
-
-This procedure is applicable by \gls{hci} researchers and practitioners
-without requiring access to the tool's source code, making it suitable for
-both internal evaluation during design and external comparative assessment
-across tools.
-
-
+$D$ ranges from $0$ (perfect compliance) to $\sqrt{2} \approx 1.41$ (worst
+case). A tool in the optimal quadrant with a low $D$ value is close to the
+ideal; a high $D$ value, even within the optimal quadrant, reveals specific
+dimensions that require improvement. The individual scores $S_{HC}$ and
+$S_{A}$ further indicate which dimension ---human control or automation---
+constitutes the primary gap.
 
 
 \section{\uppercase{Application to InsuML}}
