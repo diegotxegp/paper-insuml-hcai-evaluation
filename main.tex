@@ -139,25 +139,11 @@ interpretability}, evaluating whether the system communicates its decisions,
 configurations and results in language and formats accessible to non-technical
 users.
 
-\textbf{Computer automation dimension} is assessed through six criteria
-corresponding to the core technical tasks of the \gls{ml} pipeline:
-(i)~\textit{data type detection}, examining whether the system automatically
-infers the nature of each variable ---binary, number, category, text or
-other--- and applies appropriate encoders without requiring explicit user
-specification; (ii)~\textit{data cleaning}, evaluating the extent to which
-the system autonomously handles missing values, normalizes distributions and
-encodes categorical variables beyond the options exposed to the user;
-(iii)~\textit{feature engineering}, assessing whether the system automatically
-constructs, transforms or selects features from the raw input data without
-requiring manual specification; (iv)~\textit{model training}, determining
-whether the system autonomously executes the training process, including
-architecture selection and optimization, without requiring technical
-intervention from the user; (v)~\textit{hyperparameter optimization},
-measuring the degree to which the system searches and tunes hyperparameters
-within predefined or inferred ranges without user involvement; and
-(vi)~\textit{model validation}, evaluating whether the system automatically
-applies standard validation procedures ---such as cross-validation or hold-out
-splitting--- and reports diagnostic metrics.
+\textbf{Computer automation dimension} is assessed as a single score per
+pipeline phase ($A_{\text{global}}$), reflecting the overall degree to which
+the system autonomously executes the technical tasks of that phase ---including
+data preprocessing, model training, hyperparameter search and validation---
+using the same five-level Likert scale defined in Section~\ref{subsec:matrix}.
 
 \subsection{Theoretical Responsibility Framework}
 \label{subsec:responsibility}
@@ -177,47 +163,44 @@ Table~\ref{tab:balance} presents the theoretical responsibility distribution
 derived from the \gls{hgml} pipeline model \cite{gil2019towards} and the
 \gls{hcai} principles \cite{shneiderman2022human}, describing the expected
 allocation of decisions in an \gls{hgml} tool that fully realizes both
-frameworks. During the interface walkthrough, the evaluator contrasts the
-observed behavior of the tool against this reference to decide whether each
-criterion is fully met, partially met, or not met in each phase.
+frameworks. In a fully \gls{hcai}-compliant tool, every phase ideally
+constitutes a \textit{shared} space where the user provides domain guidance
+and the system executes within those bounds \cite{shneiderman2022human}.
+During the interface walkthrough, the evaluator contrasts the observed
+behavior of the tool against this reference to assign a score to each
+criterion in each phase.
 
 \begin{table*}[h]
 \caption{Theoretical responsibility distribution framework for \gls{hgml}
 tools under \gls{hcai} principles, derived from the \gls{hgml} pipeline model
-\cite{gil2019towards,lindauer2024position}.}
+\cite{gil2019towards,lindauer2024position}. The \textbf{Primary Owner} column
+indicates the party that bears the main responsibility for each phase:
+\textbf{U}~=~User, \textbf{S}~=~System, \textbf{Sh}~=~Shared.}
 \label{tab:balance}
 \centering
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{l p{6cm} p{6cm}}
+\begin{tabular}{l p{5.5cm} p{5.5cm} c}
 \toprule
-\textbf{Pipeline phase} & \textbf{Human control} & \textbf{Automation} \\
+\textbf{Pipeline phase} & \textbf{Human control} & \textbf{Automation} & \textbf{Primary Owner} \\
 \midrule
-Variable selection & The user prioritizes variables, proposes new
-combinations, adjusts context and identifies missing data & The system infers
-relevant features and performs automatic imputation during preprocessing \\
-Variable requirements & The expert specifies inclusion or exclusion of
-variables based on domain knowledge of their predictive strength & The system
-enforces include/exclude rules defined in the configuration and validates
-dataset consistency \\
-Instance selection & The user defines subpopulations, selects or removes
-outliers and sets the partitioning strategy & The system performs automatic
-dataset splitting, balancing and cross-validation by default \\
-Model selection & The user indicates preferred model types & The system builds
-and evaluates candidate architectures \\
-Parameter settings & The expert specifies parameter values based on domain
-knowledge & The system searches and optimizes hyperparameters within declared
-ranges \\
-Solution design & The user modifies preprocessing, feature generation,
-imputation and pipeline design & The system constructs complete pipelines
-(encoders, combiners, preprocessing) \\
-Model assessment & The user requests specific metrics & The system computes
-and reports metrics, training curves and diagnostics automatically \\
-Model comparison & The user selects models, datasets or configurations to
-compare & The system manages multiple experiments and provides comparative
-results and visualizations \\
-Parameter comparison & The user identifies parameters for targeted variation &
-The system runs ablation or sensitivity tests on parameter variations and
-reports performance impact \\
+Variable selection    & The user prioritizes variables, proposes new combinations, adjusts context and identifies missing data
+                      & The system infers relevant features and performs automatic imputation during preprocessing & Sh \\
+Variable requirements & The expert specifies inclusion or exclusion of variables based on domain knowledge of their predictive strength
+                      & The system enforces include/exclude rules defined in the configuration and validates dataset consistency & Sh \\
+Instance selection    & The user defines subpopulations, selects or removes outliers and sets the partitioning strategy
+                      & The system performs automatic dataset splitting, balancing and cross-validation by default & Sh \\
+Model selection       & The user indicates preferred model types
+                      & The system builds and evaluates candidate architectures & S \\
+Parameter settings    & The expert specifies parameter values based on domain knowledge
+                      & The system searches and optimizes hyperparameters within declared ranges & Sh \\
+Solution design       & The user modifies preprocessing, feature generation, imputation and pipeline design
+                      & The system constructs complete pipelines (encoders, combiners, preprocessing) & Sh \\
+Model assessment      & The user requests specific metrics
+                      & The system computes and reports metrics, training curves and diagnostics automatically & Sh \\
+Model comparison      & The user selects models, datasets or configurations to compare
+                      & The system manages multiple experiments and provides comparative results and visualizations & Sh \\
+Parameter comparison  & The user identifies parameters for targeted variation
+                      & The system runs ablation or sensitivity tests on parameter variations and reports performance impact & Sh \\
 \bottomrule
 \end{tabular}%
 }
@@ -227,32 +210,45 @@ reports performance impact \\
 \label{subsec:matrix}
 
 The \gls{hcai}-\gls{hgml} Compliance Matrix crosses the nine pipeline phases
-(rows) against the nine evaluation criteria (columns): three human control
-criteria and six automation criteria. Guided by the reference in
-Table~\ref{tab:balance}, the evaluator records for each cell whether the tool
-\textbf{fully meets} the criterion in that phase (\checkmark),
-\textbf{partially meets} it ($\sim$), or \textbf{does not meet it or it is
-not applicable} (---).
+(rows) against four evaluation columns: the three human control criteria
+(\textit{ease of use}, \textit{pipeline configurability}, \textit{information
+interpretability}) and a single \textit{automation global score}
+($A_{\text{global}}$) per phase. This asymmetric structure reflects the
+different analytical roles of the two dimensions: human control is
+disaggregated into three qualitatively distinct aspects of the user experience,
+while automation is expressed as a single holistic score reflecting the overall
+degree of technical autonomy exhibited by the system in that phase.
 
-Once the matrix is fully populated, two aggregate scores are computed. Let
-$n = 9$ be the number of pipeline phases, $c_{HC} = 3$ the number of human
-control criteria and $c_{A} = 6$ the number of automation criteria. For each
-cell, a value of $1$ is assigned to \checkmark, $0.5$ to $\sim$, and $0$ to
----. The \textbf{Human Control Score} and \textbf{Automation Score} are
-defined as:
+All four criteria are scored using the same five-level ordinal scale:
+\textbf{0.00}~(Absent --- the criterion is not implemented);
+\textbf{0.25}~(Minimal --- a rudimentary attempt with severe limitations);
+\textbf{0.50}~(Partial --- approximately half of the expected behavior is
+present); \textbf{0.75}~(Substantial --- the criterion is largely met with
+minor identifiable gaps); and \textbf{1.00}~(Complete --- the criterion is
+fully satisfied). Guided by the reference in Table~\ref{tab:balance}, the
+evaluator assigns one score per cell by contrasting the observed behavior of
+the tool against the theoretical expectation for that phase.
+
+Once the matrix is fully populated, two aggregate scores are computed. The
+\textbf{Human Control Score} $S_{HC}$ is the mean of all human control
+criterion scores across all phases:
 
 \begin{equation}
-    S_{HC} = \frac{1}{n \cdot c_{HC}} \sum_{i=1}^{n} \sum_{j=1}^{c_{HC}} v_{ij}
+    S_{HC} = \frac{1}{N_{HC}} \sum_{i=1}^{n} \sum_{j=1}^{c_{HC}} v_{ij}
     \label{eq:shc}
 \end{equation}
 
+\noindent where $n = 9$ is the number of pipeline phases, $c_{HC} = 3$ the
+number of human control criteria, and $v_{ij} \in [0, 1]$ is the Likert score
+assigned to cell $(i, j)$. The \textbf{Automation Score} $S_{A}$ is the mean
+of all $A_{\text{global}}$ scores across phases:
+
 \begin{equation}
-    S_{A} = \frac{1}{n \cdot c_{A}} \sum_{i=1}^{n} \sum_{j=1}^{c_{A}} v_{ij}
+    S_{A} = \frac{1}{n} \sum_{i=1}^{n} A_{\text{global},i}
     \label{eq:sa}
 \end{equation}
 
-where $v_{ij} \in \{0, 0.5, 1\}$ is the value assigned to cell $(i,j)$.
-Both scores range from 0 to~1 and together determine the \gls{hcai} quadrant
+Both scores range from 0 to 1 and together determine the \gls{hcai} quadrant
 of the tool under evaluation, as shown in Table~\ref{tab:quadrants}.
 
 \begin{table*}[ht]
@@ -272,7 +268,7 @@ Deficient (lower left)                   & $\leq 0.5$ & $\leq 0.5$ & Neither ade
 \end{table*}
 
 Beyond quadrant classification, the \textbf{distance to the ideal point}
-$(1, 1)$ provides a continuous measure of proximity to a perfect
+$(1, 1)$ provides a continuous measure of proximity to a fully
 \gls{hcai}-compliant \gls{hgml} tool:
 
 \begin{equation}
@@ -283,9 +279,17 @@ $(1, 1)$ provides a continuous measure of proximity to a perfect
 $D$ ranges from $0$ (perfect compliance) to $\sqrt{2} \approx 1.41$ (worst
 case). A tool in the optimal quadrant with a low $D$ value is close to the
 ideal; a high $D$ value, even within the optimal quadrant, reveals specific
-dimensions that require improvement. The individual scores $S_{HC}$ and
-$S_{A}$ further indicate which dimension ---human control or automation---
-constitutes the primary gap.
+dimensions that require improvement. The column scores for each human control
+criterion and the row scores for each pipeline phase further indicate where
+the primary gaps lie, enabling targeted recommendations for tool improvement.
+A notable design feature that the methodology is sensitive to is the presence
+of a \textit{pre-execution review} mechanism: a checkpoint that presents the
+complete set of user-selected options and system-applied defaults to the user
+\textit{before} automated execution begins, enabling verification and
+correction prior to commitment. Tools that implement this pattern score higher
+on information interpretability across all pipeline phases, as it transforms
+the opaque boundary between user configuration and automated execution into an
+explicit, verifiable step.
 
 
 \section{\uppercase{Application to InsuML}}
