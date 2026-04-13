@@ -117,35 +117,16 @@ Despite its potential, existing \gls{hgml} proposals present notable limitations
 \section{\uppercase{A Methodology for Evaluating HGML Tools under HCAI Criteria}}
 \label{sec:methodology}
 
-The absence of a principled evaluation instrument for \gls{hgml} tools is not
-merely a gap in the literature: it is a practical obstacle. Without explicit
-criteria for what constitutes adequate human control and adequate automation,
-assessments of \gls{hgml} tools remain impressionistic and non-comparable.
-The methodology proposed here addresses this gap by translating the abstract
-two-dimensional \gls{hcai} framework of Shneiderman~\cite{shneiderman2022human}
-into a concrete, reproducible evaluation procedure grounded in the nine-phase
-\gls{hgml} pipeline model of Gil~et~al.~\cite{gil2019towards}. The result is
-a structured instrument that yields two aggregate scores positioning any
-\gls{hgml} tool within the \gls{hcai} quadrant space, together with a
-phase-level diagnostic profile that identifies specific gaps and supports
-targeted design recommendations.
-
-The methodology is organized in three components: the evaluation dimensions
-and their operationalization into scoring criteria
-(Section~\ref{subsec:dimensions}), the theoretical responsibility framework
-that defines the expected human-system decision allocation and serves as the
-scoring reference (Section~\ref{subsec:responsibility}), and the
-\gls{hcai}-\gls{hgml} Compliance Matrix together with its aggregate metrics
-and diagnostic outputs (Section~\ref{subsec:matrix}).
+La metodología propuesta traduce el marco bidimensional abstracto de \gls{hcai} de Shneiderman~\cite{shneiderman2022human} en un procedimiento de evaluación concreto y reproducible, fundamentado en el modelo de pipeline de nueve fases de \gls{hgml} de Gil~et~al.~\cite{gil2019towards}. El resultado es un instrumento estructurado que produce dos puntuaciones agregadas que sitúan cualquier herramienta \gls{hgml} en el espacio de cuadrantes \gls{hcai}, junto con un perfil diagnóstico por fase que identifica brechas específicas y permite recomendaciones de diseño orientadas.
 
 \subsection{Evaluation Dimensions and Criteria}
 \label{subsec:dimensions}
 
 The \gls{hcai} framework positions tools along two independent axes: human
 control and computer automation \cite{shneiderman2022human}. To make these
-axes actionable for evaluation, each must be decomposed into observable,
-scorable criteria that can be assessed by examining the tool's interface and
-behavior across pipeline phases.
+axes actionable for evaluation, each must be decomposed into observable
+criteria that can be assessed by examining the tool's interface and behavior
+across pipeline phases.
 
 \textbf{Human control} is operationalized through three criteria that together
 capture the user's capacity to understand, configure and verify the system's
@@ -170,46 +151,36 @@ intelligibly~\cite{shneiderman2022human}.
     rather than blind acceptance of outputs.
 \end{itemize}
 
-\textbf{Computer automation} is operationalized as a single global score per
-pipeline phase ($A_{\text{global}}$), reflecting the overall degree to which
-the system autonomously executes the technical tasks of that phase ---including
-data preprocessing, model training, hyperparameter search and validation. This
-asymmetric structure, with three sub-criteria for human control and one for
-automation, reflects the different analytical roles of the two dimensions:
-human control is inherently multifaceted and requires disaggregation to be
-diagnostically useful, while automation is more naturally captured as a
-holistic measure of technical autonomy per phase.
+\textbf{Computer automation} captures the degree to which the system
+autonomously executes the technical tasks of each pipeline phase. It is
+decomposed into six sub-criteria, each reflecting a distinct aspect of the
+automated processing that the system performs on behalf of the user:
 
-\subsection{Theoretical Responsibility Framework}
-\label{subsec:responsibility}
+\begin{itemize}
+    \item \textit{Data type detection}: whether the system automatically
+    identifies and handles the data types present in the dataset without
+    requiring explicit user specification.
+    \item \textit{Data cleaning}: whether the system autonomously detects
+    and resolves data quality issues such as missing values, duplicates or
+    inconsistent formats.
+    \item \textit{Feature engineering}: whether the system automatically
+    generates, transforms or selects features from the raw input data.
+    \item \textit{Model training}: whether the system autonomously executes
+    the training process, including architecture instantiation and
+    optimization, without requiring manual intervention.
+    \item \textit{Hyperparameter tuning}: whether the system automatically
+    searches for optimal hyperparameter configurations within the defined
+    search space.
+    \item \textit{Model validation}: whether the system autonomously applies
+    validation strategies such as cross-validation or hold-out evaluation
+    and reports the corresponding performance estimates.
+\end{itemize}
 
-A central challenge in evaluating \gls{hgml} tools is determining what the
-expected distribution of decisions between user and system should look like in
-a fully \gls{hcai}-compliant tool. Without such a reference, scoring is
-arbitrary: a criterion can only be assessed as met or unmet relative to a
-principled expectation of what meeting it entails.
-
-The methodology addresses this by introducing a theoretical responsibility
-framework that assigns each decision within a pipeline phase to one of three
-categories. \textbf{User} decisions are those requiring domain knowledge or
-contextual judgment that the system cannot possess ---for example, which
-variables are semantically relevant to the problem, or what level of prediction
-error is acceptable in the application context. \textbf{System} decisions are
-those requiring technical \gls{ml} expertise or computational search that is
-inaccessible to non-expert users ---for example, hyperparameter optimization,
-cross-validation strategy or neural architecture selection. \textbf{Shared}
-decisions are those where the user provides high-level guidance and the system
-executes within those bounds ---for example, the user selects evaluation metrics
-and the system computes and reports them. In a fully \gls{hcai}-compliant tool,
-every pipeline phase ideally constitutes a shared space, with neither the user's
-nor the system's contribution collapsing into the other's.
-
-Table~\ref{tab:balance} presents this theoretical responsibility distribution
-across the nine pipeline phases defined by Gil~et~al.~\cite{gil2019towards}.
-It describes the expected allocation of decisions in a tool that fully realizes
-both the \gls{hgml} model and \gls{hcai} principles, and serves as the
-reference against which the tool under evaluation is contrasted when assigning
-scores to the Compliance Matrix.
+Scoring these criteria across pipeline phases requires a reference point: a
+principled description of what each phase should look like in a fully
+\gls{hcai}-compliant tool, specifying which decisions are expected from the
+user and which from the system. Table~\ref{tab:balance} serves as the benchmark against
+which any tool under evaluation is contrasted when populating the matrix.
 
 \begin{table*}[h!]
 \caption{Theoretical responsibility distribution framework for \gls{hgml}
@@ -246,9 +217,16 @@ The \gls{hcai}-\gls{hgml} Compliance Matrix is the central instrument of the
 methodology. It crosses the nine pipeline phases (rows) against four evaluation
 columns: the three human control criteria (\textit{ease of use},
 \textit{pipeline configurability}, \textit{information interpretability}) and
-the automation global score ($A_{\text{global}}$) per phase. Each cell
-represents the degree to which the tool satisfies a given criterion in a given
-phase, assessed by contrasting the tool's observed behavior against the
+a single automation score ($A_{\text{global}}$) per phase. This asymmetric
+structure reflects a deliberate methodological choice: while the six
+automation sub-criteria defined in Section~\ref{subsec:dimensions} provide a
+complete picture of a system's automated capabilities, not all sub-criteria
+are present or relevant in every pipeline phase. Collapsing them into a single
+$A_{\text{global}}$ per phase avoids artificially penalizing tools for the
+absence of sub-criteria that are structurally inapplicable to a given phase,
+while still capturing the overall degree of automation at each stage. Each
+cell represents the degree to which the tool satisfies a given criterion in a
+given phase, assessed by contrasting the tool's observed behavior against the
 theoretical expectation defined in Table~\ref{tab:balance}.
 
 All four criteria are scored on a five-level ordinal scale that provides
