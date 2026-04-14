@@ -21,8 +21,6 @@
 
 \input{acronyms}
 
-\makeglossaries
-
 \begin{document}
 
 \title{Extending Heuristic Inspection Methods\\ with Human-Centered Artificial Intelligence Criteria\\ for Human-Guided Machine Learning Tools}
@@ -699,23 +697,26 @@ approached with rigor and with the non-expert user as the protagonist.
 
 The case study demonstrates that \gls{insuml} achieves a genuine balance
 between both \gls{hcai} dimensions through deliberate design decisions:
-tab-based guided navigation, a pre-training configuration summary that
-instantiates the principle of \textit{Pre-execution Review}, and accessible
-result visualizations that enable domain experts to evaluate model outputs
-without statistical expertise.
+tab-based guided navigation, a pre-training configuration summary that makes
+every automated decision visible and correctable before execution, and
+accessible result visualizations that enable domain experts to evaluate model
+outputs without statistical expertise. The primary gap identified concerns
+pipeline configurability during model development phases, where the opacity
+of the underlying \gls{automl} engine limits the user's capacity to influence
+architectural decisions directly.
 
 From the \gls{hci} perspective, this work illustrates that interface design
 for \gls{ml} systems is not a secondary concern but a determining factor for
 effective and responsible human-AI collaboration. The design principles
-identified ---Pre-execution Review, tab-based guided navigation and explicit
-responsibility allocation--- constitute a reusable pattern vocabulary that
-\gls{hci} practitioners can apply when designing or evaluating any \gls{ml}
-tool intended for non-expert users. As future work, the most immediate
-priority is conducting formal usability studies with independent evaluators
-and real users \cite{lazar2017research}, complemented by the incorporation 
-of \gls{xai} techniques and the extension toward heterogeneous data sources, 
-maintaining human-centered design principles as the articulating axis 
-throughout.
+identified --- sequential guided navigation, explicit responsibility allocation
+and modular architectural separation --- constitute a reusable pattern
+vocabulary that \gls{hci} practitioners can apply when designing or evaluating
+any \gls{ml} tool intended for non-expert users. As future work, the most
+immediate priority is conducting formal usability studies with independent
+evaluators and real users \cite{lazar2017research}, complemented by the
+incorporation of \gls{xai} techniques and the extension toward heterogeneous
+data sources, maintaining human-centered design principles as the articulating
+axis throughout.
 
 
 
