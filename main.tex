@@ -25,29 +25,75 @@
 
 \begin{document}
 
-\title{Evaluating Human-Guided Machine Learning Tools under Human-Centered Artificial Intelligence Criteria:\\ A Structured Methodology and Its Validation}
+\title{Extending Heuristic Inspection Methods\\ with Human-Centered Artificial Intelligence Criteria\\ for Human-Guided Machine Learning Tools}
 
 
 \keywords{Human-Centered Artificial Intelligence, Human-Guided Machine Learning, Human-Computer Interaction, Automated Machine Learning}
 
 % Revisar según lo que se deje en el paper
-\abstract{Human-Guided Machine Learning (HGML) proposes actively integrating expert knowledge into the Machine Learning lifecycle. However, no established methodology exists for evaluating HGML tools under Human-Centered Artificial Intelligence (HCAI) criteria in a systematic and reproducible manner. This paper proposes a structured evaluation methodology that operationalizes the two-dimensional HCAI framework into concrete pipeline phases, responsibility assignment criteria and a Compliance Matrix that yields a structured HCAI profile for any HGML tool. The methodology is validated through its application to InsuML, an HGML tool designed for users without AI expertise, revealing both its strengths and the precise gaps that future iterations should address.}
+\abstract{Heuristic inspection methods are a well-established family of expert-based evaluation techniques in Human-Computer Interaction, enabling the assessment of interactive systems without user participation. However, existing instruments are limited to classical usability criteria and do not incorporate Human-Centered Artificial Intelligence (HCAI) dimensions, a gap that becomes increasingly relevant as AI components permeate interactive systems. This paper extends heuristic inspection methods to the domain of Human-Guided Machine Learning (HGML) by operationalizing the two-dimensional HCAI framework into a scored heuristic checklist --- the HCAI-HGML Compliance Matrix --- that yields quantifiable human control and automation scores across nine ML pipeline phases. The instrument follows the structure of established inspection checklists, enabling aggregated measurement and comparative analysis by domain experts without user participation. Its application is illustrated through a case study of InsuML, an HGML tool designed for users without AI expertise, revealing both its strengths and the specific gaps that future iterations should address.}
 
 \onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
 
 \section{\uppercase{Introduction}}
 \label{sec:introduction}
 
-The incorporation of \gls{ml} into non-technical professional domains poses a fundamental challenge: how can domain experts leverage the predictive potential of \gls{ml} without requiring specialized training in data science? \Gls{automl} tools ---software systems that   
-automate the construction of \gls{ml} models--- have taken significant steps in this direction, but their predominant orientation toward optimizing predictive performance has relegated equally relevant aspects to the background, such as process transparency, the possibility of user intervention and the comprehensibility of results \cite{barbudo2023eight}.
+The incorporation of \gls{ml} into non-technical professional domains poses 
+a fundamental challenge: how can domain experts leverage the predictive 
+potential of \gls{ml} without requiring specialized training in data science? 
+\Gls{automl} tools ---software systems that automate the construction of 
+\gls{ml} models--- have taken significant steps in this direction, but their 
+predominant orientation toward optimizing predictive performance has relegated 
+equally relevant aspects to the background, such as process transparency, the 
+possibility of user intervention and the comprehensibility of results 
+\cite{barbudo2023eight}.
 
-In parallel, the paradigm of \gls{hcai} has gained relevance as a conceptual and evaluative framework for the design of intelligent systems that place the user at the center of the process, not as a mere recipient of results, but as an active participant with control and interpretation capabilities \cite{shneiderman2022human}. However, the practical application of \gls{hcai} criteria to concrete \gls{automl} tools remains scarce in the literature: while theoretical frameworks abound, few tools have been systematically assessed against human-centered design principles.
+In parallel, the paradigm of \gls{hcai} has gained relevance as a conceptual 
+and evaluative framework for the design of intelligent systems that place the 
+user at the center of the process, not as a mere recipient of results, but as 
+an active participant with control and interpretation capabilities 
+\cite{shneiderman2022human}. However, the practical application of \gls{hcai} 
+criteria to concrete \gls{automl} tools remains scarce in the literature: 
+while theoretical frameworks abound, few tools have been systematically 
+assessed against human-centered design principles.
 
-This scarcity, however, is not merely a matter of quantity. Even when \gls{hcai} criteria are applied, a more fundamental gap persists: there is no established methodology for doing so systematically. Existing \gls{hcai} frameworks, while conceptually robust, are formulated at a level of generality that does not translate directly into actionable evaluation instruments for the specific characteristics of \gls{hgml} systems \cite{gil2019towards}. Key questions remain unanswered: which pipeline phases should be examined? What criteria determine whether a decision genuinely belongs to the user or to the system? How can the resulting human-automation balance be characterized in a reproducible and comparable manner? Addressing these questions is a prerequisite for turning \gls{hcai} evaluation from an interpretive exercise into a principled methodological contribution. This gap is precisely what the present work seeks to address.
+This scarcity, however, is not merely a matter of quantity. Even when 
+\gls{hcai} criteria are applied, a more fundamental gap persists: 
+existing expert-based evaluation instruments in \gls{hci} --- heuristic 
+evaluation with severity rating and scored heuristic checklists --- are 
+limited to classical usability criteria and do not incorporate \gls{hcai} 
+dimensions \cite{nielsen1994usability}. As \gls{ai} components become 
+pervasive in interactive systems, this limitation becomes increasingly 
+significant: evaluating whether a system provides meaningful human 
+control or achieves an appropriate level of automation falls outside the 
+scope of any existing inspection instrument. Key questions remain 
+unanswered: which pipeline phases should be examined? What criteria 
+determine whether a decision genuinely belongs to the user or to the 
+system? How can the resulting human-automation balance be characterized 
+in a reproducible and comparable manner? Addressing these questions is a 
+prerequisite for extending heuristic inspection methods into a principled 
+\gls{hcai} evaluation instrument for \gls{hgml} tools. This gap is 
+precisely what the present work seeks to address, responding to the call 
+for operationalized \gls{hcai} evaluation frameworks identified in recent 
+literature \cite{xu2026hcai}.
 
-This work therefore makes two interrelated contributions. First, it proposes a structured methodology for evaluating \gls{hgml} tools under \gls{hcai} criteria, grounded in existing \gls{hgml} pipeline frameworks. The methodology operationalizes the \gls{hcai} framework into nine pipeline phases, explicit responsibility assignment criteria and a Compliance Matrix that yields a structured \gls{hcai} profile for any \gls{hgml} tool. And second, it validates the methodology through its application to \gls{insuml}, an \gls{hgml} tool designed for non-expert users.
+This work therefore makes two interrelated contributions. First, it 
+extends heuristic inspection methods by operationalizing the 
+two-dimensional \gls{hcai} framework into nine pipeline phases, explicit 
+responsibility assignment criteria and a scored heuristic checklist --- 
+the \gls{hcai}-\gls{hgml} Compliance Matrix --- that yields a 
+quantifiable \gls{hcai} profile for any \gls{hgml} tool. Second, it 
+illustrates the application of this instrument through a case study of 
+\gls{insuml}, an \gls{hgml} tool designed for non-expert users.
 
-The remainder of this paper is structured as follows: Section~\ref{sec:background} reviews the relevant background on \gls{automl}, \gls{hcai} and \gls{hgml}; Section~\ref{sec:methodology} proposes the evaluation methodology; Section~\ref{sec:application} presents \gls{insuml} and its \gls{hcai} evaluation; Section~\ref{sec:discussion} discusses the findings and their implications; and Section~\ref{sec:conclusions} summarizes the conclusions and future work.
+The remainder of this paper is structured as follows: 
+Section~\ref{sec:background} reviews the relevant background on 
+\gls{automl}, \gls{hcai}, \gls{hgml} and heuristic inspection methods 
+in \gls{hci}; Section~\ref{sec:hcai_inspection_instrument} presents the \gls{hcai}-\gls{hgml} 
+inspection instrument; Section~\ref{sec:application} presents \gls{insuml} 
+and its \gls{hcai} evaluation as a case study; Section~\ref{sec:discussion} 
+discusses the findings and their implications; and Section~\ref{sec:conclusions} 
+summarizes the conclusions and future work.
 
 
 \section{\uppercase{Background}}
@@ -63,7 +109,9 @@ The current market offers both commercial solutions ---such as Google AutoML, Az
 
 \subsection{Human-Centered Artificial Intelligence}
 
-\Gls{hcai} represents a fundamental reorientation in the design and evaluation of intelligent systems. Unlike traditional approaches that prioritize algorithmic performance as the primary success criterion, \gls{hcai} places the user at the center of the system lifecycle, emphasizing that \gls{ai} should amplify and enhance human capabilities rather than replace them \cite{shneiderman2022human}. In the so-called third wave of \gls{ai}, \gls{hci} professionals play a central role not only in designing user experiences but also in shaping intelligent systems that are ethical, comprehensible and useful \cite{xu2019toward}.
+\Gls{hcai} represents a fundamental reorientation in the design and evaluation of intelligent systems. Unlike traditional approaches that prioritize algorithmic performance as the primary success criterion, \gls{hcai} places the user at the center of the system lifecycle, emphasizing that \gls{ai} should amplify and enhance human capabilities rather than replace them \cite{shneiderman2022human}. In the so-called third wave of \gls{ai}, \gls{hci} professionals play a central role not only in designing user experiences but also in shaping 
+intelligent systems that are ethical, comprehensible and useful 
+\cite{xu2019toward,xu2026hcai}.
 
 A distinctive aspect of this paradigm is its two-dimensional conceptualization (Figure~\ref{fig:HCAI_dimensions}). Unlike the classical notion of autonomy, which assumes an inverse relationship between automation and human control, \gls{hcai} treats both dimensions as independent. This allows conceiving systems that simultaneously combine high levels of automation with meaningful human control, representing the most desirable design space for \gls{ai} tools aimed at non-expert users.
 
@@ -109,12 +157,59 @@ Within the \gls{hgml} framework, this participation is structured around three m
 
 Despite its potential, existing \gls{hgml} proposals present notable limitations in practice. Although some theoretical frameworks cover specific parts of the pipeline, few offer complete software implementations accessible to users without \gls{ai} training, considerably reducing their applicability in real-world contexts \cite{gil2019towards,francia2023hamlet,lee2020human,lindauer2024position}.
 
+\subsection{Heuristic Inspection Methods in HCI}
 
-\section{\uppercase{A Methodology for Evaluating HGML Tools under HCAI Criteria}}
-\label{sec:methodology}
+Heuristic inspection methods constitute a well-established family of 
+expert-based evaluation techniques in \gls{hci} \cite{nielsen1994usability}. 
+Unlike empirical methods that require the participation of representative 
+users, inspection methods rely on evaluators --- typically between three and 
+five domain experts --- who analyze an interface directly against a set of 
+predefined usability principles. This makes them particularly suitable for 
+early-stage evaluation, iterative design cycles and contexts where user 
+recruitment is impractical.
 
-% Revisar
-The methodology proposed here translates the abstract two-dimensional \gls{hcai} framework of Shneiderman~\cite{shneiderman2022human} into a concrete, reproducible evaluation procedure grounded in the nine-phase \gls{hgml} pipeline model of Giletal.~\cite{gil2019towards}. The result is a structured instrument that yields two aggregate scores positioning any \gls{hgml} tool within the \gls{hcai} quadrant space, together with a phase-level diagnostic profile that identifies specific gaps and supports targeted design recommendations.
+Two variants are especially relevant to the present work. The \textit{heuristic 
+evaluation with severity rating} asks evaluators 
+to identify usability problems and classify each according to its severity on 
+an ordinal scale, enabling prioritization of redesign efforts based on their 
+impact on the user experience. The \textit{scored heuristic checklist} 
+transforms usability principles into a list of evaluable criteria, each 
+scored quantitatively --- typically on a Likert-type scale --- yielding 
+aggregate measures of the degree to which an interface complies with each 
+heuristic. This approach facilitates comparative analysis and the presentation 
+of results in numerical terms.
+
+Despite their widespread adoption, existing heuristic inspection instruments 
+are limited to classical usability criteria --- such as visibility of system 
+status, user control and freedom, or consistency and standards --- and do not 
+incorporate \gls{hcai} dimensions. This limitation is increasingly significant 
+as \gls{ai} components become pervasive in interactive systems: evaluating 
+whether a system provides meaningful human control or achieves an appropriate 
+level of automation falls outside the scope of any existing inspection 
+instrument. The present work addresses this gap by extending the scored 
+heuristic checklist paradigm to incorporate \gls{hcai} criteria within the 
+specific context of \gls{hgml} tools.
+
+
+\section{\uppercase{A HCAI Inspection Instrument for HGML Tools}}
+\label{sec:hcai_inspection_instrument}
+
+The inspection instrument proposed here extends the scored heuristic 
+checklist paradigm established in \gls{hci} \cite{nielsen1994usability} 
+to the domain of \gls{hgml} tools. Rather than evaluating classical 
+usability criteria, it operationalizes the two-dimensional \gls{hcai} 
+framework of Shneiderman~\cite{shneiderman2022human} into observable 
+criteria assessed across the nine-phase \gls{hgml} pipeline model of 
+Gil~et~al.~\cite{gil2019towards}. Like established heuristic checklists, 
+the instrument is designed to be applied by domain experts without 
+requiring user participation, yields quantitative scores that enable 
+aggregated measurement and comparative analysis, and produces a 
+phase-level diagnostic profile that identifies specific gaps and supports 
+targeted design recommendations. The result is a structured instrument 
+that yields two aggregate scores positioning any \gls{hgml} tool within 
+the \gls{hcai} quadrant space, together with a phase-level diagnostic 
+profile that identifies specific gaps and supports targeted design 
+recommendations.
 
 \subsection{Evaluation Dimensions and Criteria}
 \label{subsec:dimensions}
@@ -211,16 +306,17 @@ Parameter comparison  & User identifies parameters for targeted variation & Syst
 \label{subsec:matrix}
 
 The \gls{hcai}-\gls{hgml} Compliance Matrix is the central instrument of the
-methodology. It crosses the nine pipeline phases (rows) against four evaluation
-columns: the three human control criteria (\textit{ease of use},
-\textit{pipeline configurability}, \textit{information interpretability}) and
-a single automation score ($A_{\text{global}}$) per phase. This asymmetric
-structure reflects a deliberate methodological choice: while the six
-automation sub-criteria defined in Section~\ref{subsec:dimensions} provide a
-complete picture of a system's automated capabilities, not all sub-criteria
-are present or relevant in every pipeline phase. Collapsing them into a single
-$A_{\text{global}}$ per phase avoids artificially penalizing tools for the
-absence of sub-criteria that are structurally inapplicable to a given phase,
+evaluation. Following the structure of scored heuristic checklists, it crosses 
+the nine pipeline phases (rows) against four evaluation columns: the three 
+human control criteria (\textit{ease of use}, \textit{pipeline 
+configurability}, \textit{information interpretability}) and a single 
+automation score ($A_{\text{global}}$) per phase. This asymmetric structure 
+reflects a deliberate methodological choice: while the six automation 
+sub-criteria defined in Section~\ref{subsec:dimensions} provide a complete 
+picture of a system's automated capabilities, not all sub-criteria are present 
+or relevant in every pipeline phase. Collapsing them into a single 
+$A_{\text{global}}$ per phase avoids artificially penalizing tools for the 
+absence of sub-criteria that are structurally inapplicable to a given phase, 
 while still capturing the overall degree of automation at each stage. Each
 cell represents the degree to which the tool satisfies a given criterion in a
 given phase, assessed by contrasting the tool's observed behavior against the
@@ -289,245 +385,319 @@ measure of proximity to a fully \gls{hcai}-compliant \gls{hgml} tool:
 \noindent $D$ ranges from $0$ (perfect compliance) to $\sqrt{2} \approx 1.41$
 (worst case). A tool in the optimal quadrant with a low $D$ value is close to
 the ideal; a high $D$ value, even within the optimal quadrant, signals that
-one or both dimensions require improvement. The column scores for each human control criterion and the row scores for each pipeline phase further localize where the primary gaps lie --- whether in a specific dimension of human control, in a specific stage of the pipeline, or in both --- enabling targeted design recommendations rather than a single summary judgment.
+one or both dimensions require improvement. The column scores for each human 
+control criterion and the row scores for each pipeline phase further localize 
+where the primary gaps lie --- whether in a specific dimension of human 
+control, in a specific stage of the pipeline, or in both --- enabling targeted 
+design recommendations rather than a single summary judgment.
 
 
-\section{\uppercase{Application to InsuML}}
+\section{\uppercase{Case Study: Application to InsuML}}
 \label{sec:application}
 
+This section illustrates the application of the inspection instrument defined 
+in Section~\ref{sec:hcai_inspection_instrument} through a case study of \gls{insuml}, an 
+\gls{hgml} tool designed for non-expert users. We first describe the tool's 
+architecture and interaction model, and then present the results of its 
+\gls{hcai} evaluation through the Compliance Matrix. It is important to note 
+that this application is illustrative in nature and does not constitute a 
+formal validation of the inspection instrument. Formal validation would require 
+independent evaluators applying the matrix to multiple \gls{hgml} tools, with 
+inter-rater reliability measures confirming the instrument's reproducibility.
+
 \subsection{Tool Overview and Architecture}
+\label{subsec:tool_overview}
 
-\Gls{insuml} is a software application designed to facilitate the construction
-of predictive models by users without \gls{ai} expertise. Its design rests on
-a central premise: that domain knowledge and expert intuition are valuable
-assets that must be explicitly integrated into the \gls{ml} process, rather
-than being displaced by automation. To this end, the tool adopts the \gls{hgml}
-paradigm as its structuring principle, combining the power of an \gls{automl}
-engine with a guided \gls{gui} that makes every pipeline decision visible and
-controllable \cite{shneiderman2022human}.
+\Gls{insuml} is a software application, under active development, designed 
+to facilitate the construction of predictive models by users without \gls{ai} 
+expertise. Its design rests on a central premise: that domain knowledge and 
+expert intuition are valuable assets that must be explicitly integrated into 
+the \gls{ml} process, rather than being displaced by automation. To this end, 
+the tool adopts the \gls{hgml} paradigm as its structuring principle, 
+combining the power of an \gls{automl} engine with a guided \gls{gui} that 
+makes every pipeline decision visible and controllable.
 
-The interface is organized through a tab-based navigation system that guides
-users sequentially through the complete \gls{ml} pipeline without requiring
-programming skills. The workflow begins with a welcome screen that
-contextualizes the process, followed by dedicated tabs for dataset loading,
-variable configuration, training parameter selection and results visualization.
-Figure~\ref{fig:tab-based_interface} shows the feature configuration tab,
-illustrating the dataset preview, variable assignment controls and missing
-value handling options. Once training is complete, results are presented
-through interactive graphics and confusion matrices that facilitate
-interpretation without requiring advanced statistical expertise.
+The interface is organized through a tab-based navigation system that  
+guides users sequentially through the complete \gls{ml} pipeline without  
+requiring programming skills. Each tab exposes only the decisions  
+relevant to its corresponding phase, preventing cognitive overload  
+without sacrificing configurability. A distinctive feature of the  
+workflow is a pre-training configuration summary presented immediately  
+before execution begins: the system displays the complete set of  
+user-selected options alongside the defaults applied automatically,  
+allowing the user to review, correct or confirm every decision before  
+committing to training. The feature configuration tab, shown in  
+Figure~\ref{fig:tab-based_interface}, illustrates this approach:  
+users can inspect the loaded dataset, assign variable roles and define  
+missing value handling strategies directly from the interface, without  
+any programming intervention. Once training is complete, results are  
+presented through interactive graphics and confusion matrices that  
+facilitate interpretation without requiring advanced statistical  
+expertise.
 
-\begin{figure*}[t]
-    \caption{InsuML graphical user interface: the feature configuration tab
-    showing dataset preview, variable assignment controls and missing value
-    handling options.}
+% Revisar
+\begin{figure*}[t]  
+    \caption{\Gls{insuml} graphical user interface: the feature configuration 
+    tab illustrating the tool's \gls{hgml} interaction model. 
+    \textbf{(A)}~Dataset preview panel, displaying the loaded data in tabular 
+    form to support variable inspection without programming intervention. 
+    \textbf{(B)}~Variable role assignment controls, allowing the user to 
+    designate each feature as input, target or excluded based on domain 
+    knowledge. 
+    \textbf{(C)}~Missing value handling options, enabling the user to select 
+    imputation strategies per variable without requiring statistical expertise. 
+    \textbf{(D)}~Tab-based navigation bar, guiding the user sequentially 
+    through the complete \gls{ml} pipeline and exposing only the decisions 
+    relevant to each phase.}
     \label{fig:tab-based_interface}
-    \centering
-    \includegraphics[width=\textwidth]{ventana_preprocess_features.jpg}
+    \centering  
+    \includegraphics[width=\textwidth]{ventana_preprocess_features.jpg}  
 \end{figure*}
 
-\Gls{insuml} is built on three modular layers: an Interface Layer implemented
-in Python using Tkinter, which manages user interaction and input validation;
-a Core Logic Layer that translates user selections into technical configurations
-and automatically generates the necessary configuration files; and an
-\gls{automl} Layer based on the Ludwig engine, which handles training,
-hyperparameter optimization and model evaluation autonomously. This separation
-ensures that all automated decisions can be traced and understood, contributing
-to bias mitigation and responsible \gls{ai} deployment \cite{chen2023human}.
-The modular design also allows the underlying \gls{automl} engine to be
-replaced without altering the user experience, ensuring flexibility and
-longevity.
+\Gls{insuml} is built on three modular layers: an Interface Layer  
+implemented in Python using Tkinter, which manages user interaction and  
+input validation; a Core Logic Layer that translates user selections into  
+technical configurations and automatically generates the necessary  
+configuration files; and an \gls{automl} Layer based on the Ludwig  
+engine, which handles training, hyperparameter optimization and model  
+evaluation autonomously. This separation ensures that all automated  
+decisions can be traced and understood, contributing to bias mitigation  
+and responsible \gls{ai} deployment \cite{chen2023human}. The modular  
+design also allows the underlying \gls{automl} engine to be replaced  
+without altering the user experience, ensuring flexibility and longevity.  
 
-\subsection{HCAI Evaluation and Compliance Matrix}
+\subsection{HCAI Evaluation and Compliance Matrix}  
 
-The evaluation applies the methodology defined in Section~\ref{sec:methodology},
-contrasting \gls{insuml}'s observed behavior at each pipeline phase against the
-theoretical responsibility distribution of Table~\ref{tab:balance}.
-Table~\ref{tab:compliance_matrix} presents the resulting \gls{hcai}-\gls{hgml}
-Compliance Matrix, with each cell scored on the five-level ordinal scale
-defined in Section~\ref{subsec:matrix}.
+The following case study applies the inspection instrument defined in  
+Section~\ref{sec:hcai_inspection_instrument}, contrasting \gls{insuml}'s observed  
+behavior at each pipeline phase against the theoretical responsibility  
+distribution of Table~\ref{tab:balance}.  
+Table~\ref{tab:compliance_matrix} presents the resulting  
+\gls{hcai}-\gls{hgml} Compliance Matrix, with each cell scored on the  
+five-level ordinal scale defined in Section~\ref{subsec:matrix}.  
 
-\begin{table*}[h]
-\caption{\gls{hcai}-\gls{hgml} Compliance Matrix applied to \gls{insuml}.
-Scores follow the five-level ordinal scale: 0.00 (Absent), 0.25 (Minimal),
-0.50 (Partial), 0.75 (Substantial), 1.00 (Complete).}
-\label{tab:compliance_matrix}
-\centering
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{l ccc c}
-\toprule
- & \multicolumn{3}{c}{\textbf{Human Control}} & \textbf{Automation} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-5}
-\textbf{Pipeline phase}
-& \makecell{\textbf{Ease of}\\\textbf{Use}}
-& \makecell{\textbf{Pipeline}\\\textbf{Configurability}}
-& \makecell{\textbf{Information}\\\textbf{Interpretability}}
-& \makecell{$A_{\text{global}}$} \\
-\midrule
-Variable selection      & 1.00 & 1.00 & 0.75 & 0.75 \\
-Variable requirements   & 1.00 & 1.00 & 1.00 & 1.00 \\
-Instance selection      & 1.00 & 0.50 & 1.00 & 0.75 \\
-Model selection         & 1.00 & 0.25 & 0.50 & 1.00 \\
-Parameter settings      & 1.00 & 0.50 & 0.75 & 1.00 \\
-Solution design         & 1.00 & 0.50 & 0.75 & 0.75 \\
-Model assessment        & 1.00 & 1.00 & 1.00 & 0.75 \\
-Model comparison        & 1.00 & 1.00 & 1.00 & 0.75 \\
-Parameter comparison    & 1.00 & 0.50 & 0.75 & 0.75 \\
-\midrule
-\textbf{Score (mean)}   & \textbf{1.00} & \textbf{0.69} & \textbf{0.83} & \textbf{0.83} \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
+\begin{table*}[h]  
+\caption{\gls{hcai}-\gls{hgml} Compliance Matrix applied to \gls{insuml}.  
+Scores follow the five-level ordinal scale: 0.00 (Absent), 0.25  
+(Minimal), 0.50 (Partial), 0.75 (Substantial), 1.00 (Complete).}  
+\label{tab:compliance_matrix}  
+\centering  
+\small
+\begin{tabular}{l ccc c}  
+\toprule  
+ & \multicolumn{3}{c}{\textbf{Human Control}} & \textbf{Computer Automation} \\  
+\cmidrule(lr){2-4} \cmidrule(lr){5-5}  
+\textbf{Pipeline phase}  
+& \makecell{\textbf{Ease of Use}}  
+& \makecell{\textbf{Pipeline}\\ \textbf{Configurability}}  
+& \makecell{\textbf{Information}\\ \textbf{Interpretability}}  
+& \makecell{\textbf{Automation}} \\  
+\midrule  
+Variable selection      & 1.00 & 1.00 & 0.75 & 0.75 \\  
+Variable requirements   & 1.00 & 1.00 & 1.00 & 1.00 \\  
+Instance selection      & 1.00 & 0.50 & 1.00 & 0.75 \\  
+Model selection         & 0.00 & 0.00 & 0.75 & 1.00 \\  
+Parameter settings      & 1.00 & 1.00 & 0.75 & 1.00 \\  
+Solution design         & 1.00 & 0.50 & 0.75 & 0.75 \\  
+Model assessment        & 0.00 & 1.00 & 1.00 & 0.75 \\  
+Model comparison        & 1.00 & 0.25 & 1.00 & 0.75 \\  
+Parameter comparison    & 1.00 & 0.50 & 0.75 & 0.75 \\  
+\midrule  
+\textbf{Score (mean)}   & \textbf{0.78} & \textbf{0.69} &  
+    \textbf{0.83} & \textbf{0.83} \\  
+\bottomrule  
+\end{tabular}
+\end{table*}  
 
-Ease of use reaches a uniform score of 1.00 across all phases, reflecting the
-consistent absence of programming requirements, the progressive disclosure of
-options and the robustness of input validation throughout the workflow. Pipeline
-configurability presents the most significant variation: data use phases
----variable selection, variable requirements and model assessment--- score 1.00,
-as users can directly prioritize variables, assign roles, select metrics and
-define missing value strategies based on domain knowledge. Model development
-phases score substantially lower (0.25--0.50), as the Ludwig engine's
-architectural choices are not directly accessible to the user, who can only
-influence them indirectly through training parameter configuration. Information
-interpretability is high across data use and model interpretation phases
-(0.75--1.00), supported by interactive visualizations, accessible language and
-the pre-training configuration summary that instantiates the \textit{Pre-execution
-Review} pattern defined in Section~\ref{subsec:matrix}. The model selection
-phase constitutes the primary exception (0.50), as the opacity of automatic
-architecture selection limits the user's capacity to understand and anticipate
-the system's choices. Across the automation dimension, the Ludwig engine
-achieves complete automation ($A_{\text{global}} = 1.00$) in the variable
-requirements, model selection and parameter settings phases; the remaining
-phases score 0.75, reflecting substantial but not exhaustive automation where
-certain preprocessing decisions remain outside the engine's default scope.
+\textit{Ease of use} reaches a score of 1.00 across most phases,  
+reflecting the consistent absence of programming requirements, the  
+progressive disclosure of options through tab-based navigation and the  
+robustness of input validation throughout the workflow. The notable  
+exceptions are the model selection and model assessment phases, which  
+score 0.00, reflecting the absence of user-facing controls for these  
+two pipeline steps in the current version of \gls{insuml}. This  
+uniformity across the remaining phases results from a deliberate  
+architectural decision to expose only the options relevant to each  
+phase at each step, preventing cognitive overload without sacrificing  
+configurability.
 
-Applying Equations~\ref{eq:shc} and~\ref{eq:sa}, the aggregate scores are
-$S_{HC} = 0.84$ and $S_{A} = 0.83$, placing \gls{insuml} firmly in the
-\textbf{Optimal quadrant} of the \gls{hcai} framework, with a distance to the
-ideal point of $D = 0.23$.
+\textit{Pipeline configurability} presents the most significant  
+variation across phases. Data use phases ---variable selection, variable  
+requirements, model assessment and model comparison--- score 1.00, as  
+users can directly prioritize variables, assign roles, select evaluation  
+metrics and define missing value strategies based on domain knowledge.  
+Model development phases score substantially lower (0.25--0.50): the  
+Ludwig engine's internal architectural choices ---such as encoder  
+selection or combiner configuration--- are not directly accessible to  
+the user, who can influence them only indirectly through high-level  
+training parameter settings. This gap represents the primary area for  
+improvement in future iterations of the tool.  
+
+\textit{Information interpretability} is high across data use and model  
+interpretation phases (0.75--1.00), supported by interactive  
+visualizations, accessible language and the pre-training configuration  
+summary described in Section~\ref{subsec:tool_overview}. The model  
+selection phase constitutes the primary exception (0.75): the opacity of  
+automatic architecture selection limits the user's capacity to understand  
+and anticipate the system's choices, a limitation directly attributable  
+to the underlying \gls{automl} engine rather than to the interface layer.  
+
+Across the automation dimension, the Ludwig engine achieves complete  
+automation ($A_{\text{global}} = 1.00$) in the variable requirements,  
+model selection and parameter settings phases. The remaining phases score  
+0.75, reflecting substantial but not exhaustive automation where certain  
+preprocessing decisions ---such as outlier handling or custom feature  
+transformations--- remain outside the engine's default scope and require  
+explicit user specification.  
+
+Applying Equations~\ref{eq:shc} and~\ref{eq:sa}, the aggregate scores  
+are $S_{HC} = 0.77$ and $S_{A} = 0.83$, placing \gls{insuml} firmly in  
+the \textbf{Optimal quadrant} of the \gls{hcai} framework, with a  
+distance to the ideal point of $D = 0.25$. These results confirm that  
+high automation and meaningful human control are not opposing objectives:  
+when interaction design is approached with the non-expert user as the  
+protagonist, both dimensions can be simultaneously achieved at a high  
+level.
 
 
-\section{\uppercase{Discussion}}
-\label{sec:discussion}
+\section{\uppercase{Discussion}}  
+\label{sec:discussion}  
 
-\subsection{InsuML in the AutoML and HGML Landscape}
+The results of the \gls{hcai} evaluation of \gls{insuml} invite  
+reflection on three levels: the positioning of the tool within the  
+broader \gls{hgml} and \gls{automl} landscape, the design implications  
+that the evaluation surfaces for \gls{hci} practitioners, and the  
+limitations of the inspection instrument and the tool that future work  
+should address.  
 
-The \gls{hcai} evaluation presented in the previous section allows
-\gls{insuml} to be situated within the current \gls{automl} landscape from a
-perspective that goes beyond predictive performance. Tools such as AutoGluon
-or H2O-3 achieve more competitive results on most benchmarks, but their
-predominant orientation toward technically proficient users, the absence of
-guided workflows and the limited interpretability of their interfaces place
-them in a design space different from that advocated by \gls{hcai}
-\cite{lindauer2024position}. \Gls{insuml} does not compete in the same space
-as these tools: it competes in the human-centered design space, where
-accessibility, transparency and meaningful control are the primary success
-criteria.
+\subsection{InsuML in the HGML Landscape}  
 
-The comparison with existing \gls{hgml} proposals further reinforces this
-distinction. Works such as those of Gil et al. \cite{gil2019towards} and Lee
-et al. \cite{lee2020human} establish comprehensive theoretical frameworks
-covering the full \gls{ml} pipeline from a human-centered perspective, but
-lack software implementation and have not been evaluated under \gls{hcai}
-criteria. The HAMLET framework of Francia et al. \cite{francia2023hamlet},
-while providing partial software support, is specifically oriented toward
-\gls{ai} experts, limiting its applicability to the non-technical user profile
-that \gls{hgml} aims to reach. Lindauer et al. \cite{lindauer2024position}
-explicitly call for more human-centered \gls{automl} tools, acknowledging that
-current proposals insufficiently address usability, interpretability and
-customization criteria. To the best of our knowledge, \gls{insuml} is among
-the few proposals that combine full pipeline coverage, operational software
-implementation, accessibility for non-AI users and explicit evaluation under
-\gls{hcai} criteria. While Xu et al. \cite{xu2026hcai} advance \gls{hcai}
-methodology at a systemic level, the present work complements their
-contribution by providing an operationalized, pipeline-specific evaluation
-instrument for \gls{hgml} tools.
+The \gls{hcai} evaluation situates \gls{insuml} within the current
+landscape of \gls{hgml} and \gls{automl} tools from a perspective that
+goes beyond predictive performance. As Lindauer~et~al.~\cite{lindauer2024position}
+acknowledge, current \gls{automl} proposals insufficiently address
+usability, interpretability and customization for non-expert users ---
+criteria that are, by contrast, the primary success axis of \gls{insuml}.
 
-\subsection{Pre-execution Review as a Design Principle}
+The comparison with existing \gls{hgml} proposals further reinforces  
+this positioning. The frameworks of Gil~et~al.~\cite{gil2019towards} and  
+Lee~et~al.~\cite{lee2020human} provide comprehensive theoretical  
+coverage of the \gls{ml} pipeline from a human-centered perspective, but  
+lack operational software implementations and have not been evaluated  
+under \gls{hcai} criteria. The HAMLET framework of  
+Francia~et~al.~\cite{francia2023hamlet}, while providing partial  
+software support, targets \gls{ai} experts rather than the non-technical  
+user profile that \gls{hgml} aims to reach. Lindauer~et~al.  
+\cite{lindauer2024position} explicitly call for more human-centered  
+\gls{automl} tools, acknowledging that current proposals insufficiently  
+address usability, interpretability and customization. To the best of  
+our knowledge, \gls{insuml} is among the few proposals that combine full  
+pipeline coverage, operational software implementation, accessibility for  
+non-\gls{ai} users and explicit evaluation under \gls{hcai} criteria.  
+While Xu~et~al.~\cite{xu2026hcai} advance \gls{hcai} methodology at a  
+systemic level, the present work complements their contribution by  
+providing an operationalized, pipeline-specific inspection instrument  
+applicable to any \gls{hgml} tool.  
 
-A concept that emerges from the evaluation of \gls{insuml} and deserves
-explicit articulation as a transferable design principle is \textit{Pre-execution
-Review}: the capacity of a system to make its forthcoming automated behavior
-visible and verifiable to the user \textit{before} that behavior is executed,
-rather than explaining it \textit{after the fact}. This concept is related to,
-but distinct from, post-hoc explainability \cite{arrieta2020explainable} and
-algorithmic transparency \cite{diakopoulos2016accountability}: unlike these,
-Pre-execution Review operates at the interaction level rather than the model
-level, and is triggered before execution rather than after. To our knowledge,
-no prior work has explicitly defined this property as a design criterion for
-\gls{ml} interfaces.
+\subsection{Implications for HCI-Oriented ML Interface Design}  
 
-In \gls{insuml}, Pre-execution Review is materialized through the pre-training
-configuration summary: a checkpoint that presents the complete set of
-user-selected options and system-applied defaults before training begins. This
-mechanism transforms the transition from user configuration to automated
-execution ---habitually an opaque boundary in conventional \gls{automl}
-systems--- into an explicit verification step. The user is not merely informed
-of what the system did; they are invited to confirm what the system
-\textit{will do}, preserving their agency at the most consequential decision
-point in the pipeline.
+Beyond the specific evaluation of \gls{insuml}, the application of the  
+inspection instrument yields transferable insights for the design of  
+\gls{ml} interfaces targeting non-expert users. Three design decisions in  
+\gls{insuml} prove particularly consequential from an \gls{hci}  
+perspective and merit explicit articulation as reusable principles.  
 
-More broadly, the \gls{hcai} evaluation of \gls{insuml} yields transferable
-insights for the design of future \gls{ml} tools targeting non-expert users.
-Sequential tab-based navigation proves to be an effective interaction pattern
-for guiding users through complex processes without overwhelming them with
-simultaneous technical options. The architectural separation between the
-interface and core logic layers carries ethical implications beyond its
-technical advantages: by making the translation between user intentions and
-technical parameters explicit, the system reduces the risk of inadvertent
-perpetuation of data biases \cite{chen2023human,komala2024fair}. Together,
-Pre-execution Review, tab-based guided navigation and transparent
-responsibility allocation constitute a reusable pattern vocabulary for
-human-centered \gls{ml} interface design that \gls{hci} practitioners can
-apply independently of the underlying \gls{automl} engine.
+First, \textit{sequential tab-based navigation} structures the  
+interaction as a guided progression through pipeline phases, exposing  
+only the decisions relevant to each step. This pattern reduces cognitive  
+load without sacrificing configurability, and its consistent contribution  
+to ease of use scores of 1.00 across most phases suggests it as a  
+reliable interaction model for complex, multi-step \gls{ml} workflows.  
 
-\subsection{Limitations and Future Work}
+Second, \textit{explicit responsibility allocation} --- making visible  
+which decisions are made by the user and which are handled automatically  
+by the system --- directly supports information interpretability. The  
+pre-training configuration summary exemplifies this principle: it  
+transforms an habitually opaque boundary between user configuration and  
+automated execution into an explicit, inspectable checkpoint that  
+preserves user agency at the most consequential decision point in the  
+pipeline.  
 
-The evaluation presented in this work is not without limitations. The
-Compliance Matrix scores are assigned through structured interface analysis, and although the methodology provides explicit criteria and a
-theoretical reference for each cell, the ordinal scale retains an inherent
-degree of interpretive judgment. Formal inter-rater reliability studies,
-involving independent evaluators applying the matrix to the same tool, would
-strengthen the instrument's reproducibility and constitute a natural next step
-for its validation.
+Third, \textit{modular architectural separation} between the interface,  
+core logic and \gls{automl} layers carries implications beyond technical  
+maintainability. By making the translation between user intentions and  
+technical parameters explicit and traceable, this separation reduces the  
+risk of inadvertent perpetuation of data biases and supports responsible  
+\gls{ai} deployment \cite{chen2023human,komala2024fair}. It also  
+decouples the user experience from the underlying engine, allowing the  
+\gls{automl} backend to evolve independently without disrupting the  
+interaction model.  
 
-Additionally, although \gls{insuml} was co-designed with non-expert users,
-the current work lacks formal usability studies measuring empirical metrics
-such as task completion time, error rates or user satisfaction with actual
-domain specialists performing realistic modeling tasks. This empirical
-validation constitutes the most immediate priority for future work, and should
-be conducted following established \gls{hci} research methods
-\cite{lazar2017research}.
+These three principles --- sequential guided navigation, explicit  
+responsibility allocation and modular architectural separation ---  
+constitute a reusable pattern vocabulary that \gls{hci} practitioners  
+can apply when designing or evaluating \gls{ml} tools for non-expert  
+users, independently of the specific \gls{automl} engine employed.  
 
-Finally, \gls{insuml}'s current explainability capabilities are limited.
-Incorporating \gls{xai} techniques such as \gls{shap} or \gls{lime}
-\cite{salih2025perspective} would considerably enrich the model interpretation
-phase, enabling users to understand not only global model performance but also
-which variables contribute to each prediction and why. Extending the tool
-toward larger-scale datasets and heterogeneous data sources ---text, images,
-time series--- would further broaden its real-world applicability while
-maintaining the human-centered design principles that articulate its
+\subsection{Limitations and Future Work}  
+
+The evaluation presented in this work is not without limitations. The  
+Compliance Matrix scores were assigned through structured interface  
+analysis conducted by the authors of the tool itself. While the  
+instrument provides explicit criteria and a theoretical reference for  
+each cell, this evaluator profile introduces a potential source of bias:  
+familiarity with the tool's design rationale may influence score  
+assignment in ways that an independent evaluator would not replicate.  
+Formal inter-rater reliability studies, involving independent evaluators  
+--- ideally three to five domain experts, following standard heuristic  
+evaluation practice \cite{nielsen1994usability} --- applying the matrix  
+to the same tool, would strengthen the instrument's reproducibility and  
+constitute a natural next step toward its consolidation as a  
+general-purpose inspection instrument for \gls{hgml} tools.  
+Consequently, the results presented here should be interpreted as an 
+illustrative application of the instrument rather than as evidence of 
+its formal validity.
+
+Additionally, the current work lacks formal usability studies measuring  
+empirical metrics such as task completion time, error rates or user  
+satisfaction with actual domain specialists performing realistic modeling  
+tasks. This empirical evaluation constitutes the most immediate priority  
+for future work, and should be conducted following established \gls{hci}  
+research methods \cite{lazar2017research}. Such studies would not only  
+complement the structural evaluation presented here, but would also  
+provide evidence on whether the design decisions identified as beneficial  
+translate into measurable improvements in user performance and  
+satisfaction.  
+
+Finally, \gls{insuml}'s current explainability capabilities are limited  
+to global performance metrics and confusion matrices. Incorporating  
+\gls{xai} techniques such as \gls{shap} or \gls{lime}  
+\cite{salih2025perspective} would considerably enrich the model  
+interpretation phase, enabling users to understand which variables  
+contribute to individual predictions and why. Extending the tool toward  
+larger-scale datasets and heterogeneous data sources --- text, images,  
+time series --- would further broaden its real-world applicability while  
+maintaining the human-centered design principles that articulate its  
 development.
 
 
 \section{\uppercase{Conclusions}}
 \label{sec:conclusions}
 
-This paper has presented two interrelated contributions. First, a structured
-methodology for evaluating \gls{hgml} tools under \gls{hcai} criteria, which
-operationalizes the two-dimensional \gls{hcai} framework into concrete pipeline
-phases, a theoretical responsibility distribution framework and a reproducible
-expert-based evaluation procedure formalized as an \gls{hcai}-\gls{hgml}
-Compliance Matrix with aggregate scores $S_{HC}$, $S_{A}$ and distance metric
-$D$. Second, an application of this methodology to \gls{insuml}, an \gls{hgml}
-tool designed for users without \gls{ai} expertise, yielding $S_{HC} = 0.84$,
-$S_{A} = 0.83$ and $D = 0.23$, and demonstrating that high automation and high
-human control are not opposing objectives but complementary ones when
-interaction design is approached with rigor and with the non-expert user as
-the protagonist.
+This paper has presented two interrelated contributions. First, an extension 
+of heuristic inspection methods to the domain of \gls{hgml} tools under 
+\gls{hcai} criteria, operationalizing the two-dimensional \gls{hcai} framework 
+into concrete pipeline phases, a theoretical responsibility distribution 
+framework and a reproducible expert-based inspection procedure formalized as 
+an \gls{hcai}-\gls{hgml} Compliance Matrix with aggregate scores $S_{HC}$, 
+$S_{A}$ and distance metric $D$. Second, a case study illustrating the 
+application of this instrument to \gls{insuml}, an \gls{hgml} tool designed 
+for users without \gls{ai} expertise, yielding $S_{HC} = 0.77$, $S_{A} = 0.83$ 
+and $D = 0.25$, and demonstrating that high automation and high human control 
+are not opposing objectives but complementary ones when interaction design is 
+approached with rigor and with the non-expert user as the protagonist.
 
-The application demonstrates that \gls{insuml} achieves a genuine balance
+The case study demonstrates that \gls{insuml} achieves a genuine balance
 between both \gls{hcai} dimensions through deliberate design decisions:
 tab-based guided navigation, a pre-training configuration summary that
 instantiates the principle of \textit{Pre-execution Review}, and accessible
@@ -541,10 +711,11 @@ identified ---Pre-execution Review, tab-based guided navigation and explicit
 responsibility allocation--- constitute a reusable pattern vocabulary that
 \gls{hci} practitioners can apply when designing or evaluating any \gls{ml}
 tool intended for non-expert users. As future work, the most immediate
-priority is conducting formal usability studies with real users
-\cite{lazar2017research}, complemented by the incorporation of \gls{xai}
-techniques and the extension toward heterogeneous data sources, maintaining
-human-centered design principles as the articulating axis throughout.
+priority is conducting formal usability studies with independent evaluators
+and real users \cite{lazar2017research}, complemented by the incorporation 
+of \gls{xai} techniques and the extension toward heterogeneous data sources, 
+maintaining human-centered design principles as the articulating axis 
+throughout.
 
 
 
