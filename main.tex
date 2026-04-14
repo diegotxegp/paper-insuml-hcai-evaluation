@@ -27,10 +27,6 @@
 
 \title{Evaluating Human-Guided Machine Learning Tools under Human-Centered Artificial Intelligence Criteria:\\ A Structured Methodology and Its Validation}
 
-\author{\authorname{Diego García-Prieto\sup{1}\orcidAuthor{0000-0002-7461-2961}, Camilo Palazuelos\sup{1}\orcidAuthor{0000-0003-4132-9550} and Rafael Duque\sup{1}\orcidAuthor{0000-0001-8636-3213}}
-\affiliation{\sup{1}Department of Mathematics, Statistics and Computer Science, University of Cantabria, Avenida de Los Castros s/n, Santander, Spain}
-\email{\{diego.garciaprieto, camilo.palazuelos, rafael.duque\}@unican.es}
-}
 
 \keywords{Human-Centered Artificial Intelligence, Human-Guided Machine Learning, Human-Computer Interaction, Automated Machine Learning}
 
@@ -117,7 +113,8 @@ Despite its potential, existing \gls{hgml} proposals present notable limitations
 \section{\uppercase{A Methodology for Evaluating HGML Tools under HCAI Criteria}}
 \label{sec:methodology}
 
-La metodología propuesta traduce el marco bidimensional abstracto de \gls{hcai} de Shneiderman~\cite{shneiderman2022human} en un procedimiento de evaluación concreto y reproducible, fundamentado en el modelo de pipeline de nueve fases de \gls{hgml} de Gil~et~al.~\cite{gil2019towards}. El resultado es un instrumento estructurado que produce dos puntuaciones agregadas que sitúan cualquier herramienta \gls{hgml} en el espacio de cuadrantes \gls{hcai}, junto con un perfil diagnóstico por fase que identifica brechas específicas y permite recomendaciones de diseño orientadas.
+% Revisar
+The methodology proposed here translates the abstract two-dimensional \gls{hcai} framework of Shneiderman~\cite{shneiderman2022human} into a concrete, reproducible evaluation procedure grounded in the nine-phase \gls{hgml} pipeline model of Giletal.~\cite{gil2019towards}. The result is a structured instrument that yields two aggregate scores positioning any \gls{hgml} tool within the \gls{hcai} quadrant space, together with a phase-level diagnostic profile that identifies specific gaps and supports targeted design recommendations.
 
 \subsection{Evaluation Dimensions and Criteria}
 \label{subsec:dimensions}
@@ -176,7 +173,7 @@ automated processing that the system performs on behalf of the user:
     and reports the corresponding performance estimates.
 \end{itemize}
 
-Scoring these criteria across pipeline phases requires a reference point: a
+Evaluating these criteria across pipeline phases requires a reference point: a
 principled description of what each phase should look like in a fully
 \gls{hcai}-compliant tool, specifying which decisions are expected from the
 user and which from the system. Table~\ref{tab:balance} serves as the benchmark against
@@ -231,7 +228,7 @@ theoretical expectation defined in Table~\ref{tab:balance}.
 
 All four criteria are scored on a five-level ordinal scale that provides
 sufficient granularity to capture meaningful differences in implementation
-quality without demanding a degree of precision that a structured interface
+quality without demanding a degree of precision that an interface
 analysis cannot reliably support:
 \textbf{0.00}~(Absent --- the criterion is not implemented);
 \textbf{0.25}~(Minimal --- a rudimentary attempt with severe limitations);
@@ -255,7 +252,7 @@ is the ordinal score assigned to cell $(i, j)$. The \textbf{Automation Score}
 $S_{A}$ is the mean of all $A_{\text{global}}$ scores across phases:
 
 \begin{equation}
-    S_{A} = \frac{1}{n} \sum_{i=1}^{n} A_{\text{global},i}
+    S_{A} = \frac{1}{n} \sum_{i=1}^{n} A_{\text{global},\text{i}}
     \label{eq:sa}
 \end{equation}
 
@@ -292,24 +289,7 @@ measure of proximity to a fully \gls{hcai}-compliant \gls{hgml} tool:
 \noindent $D$ ranges from $0$ (perfect compliance) to $\sqrt{2} \approx 1.41$
 (worst case). A tool in the optimal quadrant with a low $D$ value is close to
 the ideal; a high $D$ value, even within the optimal quadrant, signals that
-one or both dimensions require improvement. The column scores for each human
-control criterion and the row scores for each pipeline phase further localize
-where the primary gaps lie, enabling targeted design recommendations rather
-than a single summary judgment.
-
-Beyond the aggregate scores, the matrix is also sensitive to specific
-interaction design patterns that have direct implications for scoring. A
-particularly relevant one is what we term \textit{Pre-execution Review}: the
-property of a system that presents the complete set of user-selected options
-and system-applied defaults \textit{before} automated execution begins,
-enabling verification and correction prior to commitment. Unlike post-hoc
-explainability mechanisms, which account for decisions already made,
-Pre-execution Review operates at the boundary between user configuration and
-automated execution, transforming an habitually opaque transition into an
-explicit, inspectable checkpoint. This property has direct scoring implications:
-tools that implement it receive higher scores on information interpretability
-across all pipeline phases, as they afford non-expert users a meaningful
-opportunity to exercise informed control before the system acts.
+one or both dimensions require improvement. The column scores for each human control criterion and the row scores for each pipeline phase further localize where the primary gaps lie --- whether in a specific dimension of human control, in a specific stage of the pipeline, or in both --- enabling targeted design recommendations rather than a single summary judgment.
 
 
 \section{\uppercase{Application to InsuML}}
@@ -567,9 +547,6 @@ techniques and the extension toward heterogeneous data sources, maintaining
 human-centered design principles as the articulating axis throughout.
 
 
-\section*{\uppercase{Acknowledgements}}
-
-This work has been supported by grant PID2023-146243OB-I00 funded by MICIU/AEI/10.13039/501100011033 and by ``ERDF/EU''.
 
 
 \bibliographystyle{apalike}
