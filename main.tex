@@ -26,6 +26,10 @@
 
 \title{Human-Centered AI Criteria for Heuristic Inspection\\ of Guided ML Tools}
 
+\author{\authorname{Diego Garc\'ia-Prieto\orcidAuthor{0000-0002-7461-2961}, Camilo Palazuelos\orcidAuthor{0000-0003-4132-9550} and Rafael Duque\orcidAuthor{0000-0001-8636-3213}}
+\affiliation{Dept. of Mathematics, Statistics and Computer Science, University of Cantabria,\\ Avda. de Los Castros s/n, Santander, Spain}
+\email{\{diego.garciaprieto, camilo.palazuelos, rafael.duque\}@unican.es}
+}
 
 \keywords{Human-Centered Artificial Intelligence, Heuristic Inspection, Human-Guided Machine Learning, Human-Computer Interaction, Automated Machine Learning}
 
@@ -192,7 +196,7 @@ specific context of \gls{hgml} tools.
 \section{\uppercase{A HCAI Inspection Instrument for HGML Tools}}
 \label{sec:hcai_inspection_instrument}
 
-The inspection instrument proposed here extends the scored heuristic checklist paradigm established in \gls{hci} \cite{nielsen1994usability} to the domain of \gls{hgml} tools. Rather than evaluating classical usability criteria, it operationalizes the two-dimensional \gls{hcai} framework \cite{shneiderman2022human} into observable criteria assessed across the nine-phase \gls{hgml} pipeline model \cite{gil2019towards}. Like established heuristic checklists, the instrument can be applied without user participation and produces quantitative scores that support aggregated measurement and comparative analysis. It produces two aggregate scores positioning a tool within the \gls{hcai} quadrant space, along with a phase-level diagnostic profile to identify gaps and guide targeted design recommendations.
+The inspection instrument proposed here adopts the structure of the scored heuristic checklist paradigm established in \gls{hci} \cite{nielsen1994usability}, but replaces its classical usability criteria with \gls{hgml}-specific dimensions of human control and automation that existing inspection instruments do not address. It operationalizes the two-dimensional \gls{hcai} framework \cite{shneiderman2022human} into observable criteria assessed across the nine-phase \gls{hgml} pipeline model \cite{gil2019towards}. Like established heuristic checklists, the instrument can be applied without user participation and produces quantitative scores that support aggregated measurement and comparative analysis, positioning a tool within the \gls{hcai} quadrant space and providing a phase-level diagnostic profile to identify gaps and guide targeted design recommendations.
 
 \subsection{Dimensions and Criteria}
 \label{subsec:dimensions}
@@ -429,17 +433,11 @@ evaluation autonomously. This separation ensures that all automated
 decisions can be traced and understood, contributing to bias mitigation  
 and responsible \gls{ai} deployment \cite{chen2023human}. The modular  
 design also allows the underlying \gls{automl} engine to be replaced  
-without altering the user experience, ensuring flexibility and longevity.  
+without altering the user experience, ensuring flexibility and longevity.
 
 \subsection{HCAI Inspection and Compliance Matrix}
 
-The following case study applies the inspection instrument defined in
-Section~\ref{sec:hcai_inspection_instrument}, contrasting \gls{insuml}'s observed
-behavior at each pipeline phase against the theoretical responsibility
-distribution of Table~\ref{tab:balance}.
-Table~\ref{tab:compliance_matrix} presents the resulting
-\gls{hcai}-\gls{hgml} Compliance Matrix, with each cell scored on the
-five-level ordinal scale defined in Section~\ref{subsec:matrix}.
+The following case study applies the inspection instrument defined in Section~\ref{sec:hcai_inspection_instrument}, contrasting \gls{insuml}'s observed behavior at each pipeline phase against the theoretical responsibility distribution of Table~\ref{tab:balance}. To assess the generalizability of the instrument beyond this single case, it was additionally applied using datasets from the OpenML repository --- including the diabetes and cmc datasets, among others --- as well as datasets from clinical research scenarios involving patient registries, observational studies and clinical trials \cite{hamelin2026}, yielding consistent results across all these contexts. Table~\ref{tab:compliance_matrix} presents the resulting \gls{hcai}-\gls{hgml} Compliance Matrix, with each cell scored on the five-level ordinal scale defined in Section~\ref{subsec:matrix}.
 
 \begin{table*}[h]
 \caption{\gls{hcai}-\gls{hgml} Compliance Matrix applied to \gls{insuml}.
@@ -687,7 +685,9 @@ of parameter comparison functionality and the extension toward heterogeneous
 data sources.
 
 
+\section*{\uppercase{Acknowledgements}}
 
+\small This work has been supported by grant  PID2023-146243OB-I00 funded by MICIU/AEI/10.13039/501100011033 and by ``ERDF/EU''.
 
 \bibliographystyle{apalike}
 {\small
