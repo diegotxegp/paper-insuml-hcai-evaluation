@@ -105,7 +105,7 @@ summarizes the conclusions and future work.
 
 \Gls{automl} tools emerged in response to the growing demand for \gls{ml} solutions and the shortage of qualified data scientists \cite{he2021automl}. Their purpose is to democratize access to \gls{ml} by automating complex tasks such as feature engineering, model selection, hyperparameter optimization and evaluation, making advanced analytics accessible to users without deep technical knowledge.
 
-However, this predominantly automation-oriented approach frequently operates as a black box, making it difficult for users to understand decision-making processes, incorporate domain-specific knowledge or maintain meaningful control over the modeling process \cite{garouani2023unlocking}. This limitation is not minor: the lack of transparency can conceal underlying biases and prevent the human-AI collaboration necessary to obtain reliable and contextually appropriate results \cite{komala2024fair}.
+However, this predominantly automation-oriented approach frequently operates as a black box, making it difficult for users to understand decision-making processes, incorporate domain-specific knowledge or maintain meaningful control over the modeling process \cite{garouani2023unlocking}. This limitation is not minor: the lack of transparency can conceal underlying biases and prevent the human-AI collaboration necessary to obtain reliable and contextually appropriate results \cite{komala2024fair}. Recent proposals have attempted to address this limitation by integrating \gls{llm} into \gls{automl} pipelines, enabling users to interact with the modeling process through natural language \cite{miguel2025integrating} and receive intelligible explanations of automated decisions \cite{francois2025interactive}. While these approaches represent a step toward greater transparency and accessibility, they do not provide a structured evaluation framework under \gls{hcai} criteria, nor do they offer the guided, phase-by-phase pipeline control that characterizes \gls{hgml} tools.
 
 The current market offers both commercial solutions ---such as Google AutoML, Azure Automated ML or Amazon SageMaker Autopilot--- and free alternatives ---including Ludwig, AutoGluon, H2O-3 or PyCaret---, designed to meet varying levels of technical expertise. However, the analysis of these tools reveals that none simultaneously maximizes human control and automation, each representing a different balance between accessibility, interpretability and technical sophistication \cite{palazuelos2024non}.
 
@@ -188,9 +188,7 @@ incorporate \gls{hcai} dimensions. This limitation is increasingly significant
 as \gls{ai} components become more frequent in interactive systems: evaluating 
 whether a system provides meaningful human control or achieves an appropriate 
 level of automation falls outside the scope of any existing inspection 
-instrument. The present work addresses this gap by extending the scored 
-heuristic checklist paradigm to incorporate \gls{hcai} criteria within the 
-specific context of \gls{hgml} tools.
+instrument.
 
 
 \section{\uppercase{A HCAI Inspection Instrument for HGML Tools}}
@@ -437,7 +435,7 @@ without altering the user experience, ensuring flexibility and longevity.
 
 \subsection{HCAI Inspection and Compliance Matrix}
 
-The following case study applies the inspection instrument defined in Section~\ref{sec:hcai_inspection_instrument}, contrasting \gls{insuml}'s observed behavior at each pipeline phase against the theoretical responsibility distribution of Table~\ref{tab:balance}. To assess the generalizability of the instrument beyond this single case, it was additionally applied in a clinical research context --- covering patient registries, observational studies and clinical trials --- as reported in our previous work \cite{hamelin2026}, as well as to datasets from the OpenML repository, including the diabetes and cmc datasets among others, all yielding consistent results. Table~\ref{tab:compliance_matrix} presents the resulting \gls{hcai}-\gls{hgml} Compliance Matrix, with each cell scored on the five-level ordinal scale defined in Section~\ref{subsec:matrix}.
+The following case study applies the inspection instrument defined in Section~\ref{sec:hcai_inspection_instrument}, contrasting \gls{insuml}'s observed behavior at each pipeline phase against the theoretical responsibility distribution of Table~\ref{tab:balance}. To assess the generalizability of the instrument beyond this single case, it was additionally applied in a clinical research context --- covering patient registries, observational studies and clinical trials --- as reported in our previous work \cite{garciaprieto2026towards}, as well as to datasets from the OpenML repository, including the diabetes and cmc datasets among others, all yielding consistent results. Table~\ref{tab:compliance_matrix} presents the resulting \gls{hcai}-\gls{hgml} Compliance Matrix, with each cell scored on the five-level ordinal scale defined in Section~\ref{subsec:matrix}.
 
 \begin{table*}[h]
 \caption{\gls{hcai}-\gls{hgml} Compliance Matrix applied to \gls{insuml}.
@@ -545,9 +543,9 @@ phases--- and the absence of parameter comparison functionality remain the
 primary dimensions for improvement.
 
 
-\section{\uppercase{Discussion}}    
-\label{sec:discussion}    
-  
+\section{\uppercase{Discussion}}
+\label{sec:discussion}
+
 The results of the \gls{hcai} inspection of \gls{insuml} invite    
 reflection on three levels: the positioning of the tool within the    
 broader \gls{hgml} and \gls{automl} landscape, the design implications    
@@ -555,99 +553,81 @@ that the inspection surfaces for \gls{hci} practitioners, and the
 limitations of the inspection instrument and the tool that future work    
 should address.
 
+\subsection{InsuML in the HGML Landscape}
 
-\subsection{InsuML in the HGML Landscape} 
-  
-The \gls{hcai} inspection situates \gls{insuml} within the current  
-landscape of \gls{hgml} and \gls{automl} tools from a perspective that  
-goes beyond predictive performance. The frameworks of    
-Gil~et~al.~\cite{gil2019towards} and Lee~et~al.~\cite{lee2020human}    
-provide comprehensive theoretical coverage of the \gls{ml} pipeline from    
-a human-centered perspective, but lack operational software implementations    
-and have not been evaluated under \gls{hcai} criteria. The HAMLET framework    
-of Francia~et~al.~\cite{francia2023hamlet}, while providing partial software    
-support, targets \gls{ai} experts rather than the non-technical user profile.
-Lindauer~et~al.~\cite{lindauer2024position} explicitly call for more    
-human-centered \gls{automl} tools, acknowledging that current proposals    
-insufficiently address usability, interpretability and customization ---    
-criteria that are, by contrast, the primary success axis of \gls{insuml}.
+The \gls{hcai} inspection situates \gls{insuml} within the current
+landscape of \gls{hgml} and \gls{automl} tools beyond predictive
+performance. The frameworks of Gil~et~al.~\cite{gil2019towards} and
+Lee~et~al.~\cite{lee2020human} offer comprehensive theoretical coverage
+of the \gls{ml} pipeline from a human-centered perspective, but lack
+operational implementations and have not been evaluated under \gls{hcai}
+criteria. The HAMLET framework of Francia~et~al.~\cite{francia2023hamlet}
+provides partial software support but targets \gls{ai} experts rather
+than non-technical users. Lindauer~et~al.~\cite{lindauer2024position}
+call for more human-centered \gls{automl} tools, acknowledging that
+current proposals insufficiently address usability, interpretability and
+customization --- criteria that are the primary success axis of \gls{insuml}.
 
-To the best of our knowledge, \gls{insuml} is the only proposal that combines
-full pipeline coverage, operational software implementation, accessibility for
+To the best of our knowledge, \gls{insuml} is the only proposal combining
+full pipeline coverage, operational software, accessibility for
 non-\gls{ai} users and explicit evaluation under \gls{hcai} criteria.
-Xu~et~al.~\cite{xu2026hcai} address \gls{hcai} from a broad, conceptual
-perspective; the present work complements their contribution by grounding
-these principles in a concrete, pipeline-specific inspection instrument
-applicable to any \gls{hgml} tool.
+Xu~et~al.~\cite{xu2026hcai} address \gls{hcai} conceptually; the present
+work complements their contribution by grounding these principles in a
+concrete, pipeline-specific inspection instrument applicable to any
+\gls{hgml} tool.
 
-  
-\subsection{Implications for HCI-Oriented ML Interface Design}    
-  
-Beyond the specific analysis of \gls{insuml}, the application of the    
-inspection instrument provides transferable insights for the design of    
-\gls{ml} interfaces targeting non-expert users. Three design decisions emerging from the inspection prove particularly consequential from an \gls{hci} perspective and are articulated here as reusable principles.    
-  
-First, \emph{sequential tab-based navigation} structures the  
-interaction as a guided progression through pipeline phases, exposing  
-only the decisions relevant to each step, with bidirectional access that  
-allows users to revisit and revise earlier choices without losing  
-subsequent configuration. This pattern reduces cognitive load without  
-sacrificing configurability, and its consistent contribution to ease of  
-use scores of 1.00 across most phases suggests it as a reliable  
-interaction model for complex, multi-step \gls{ml} workflows.  
-  
+\subsection{Implications for HCI-Oriented ML Interface Design}
+
+Beyond the analysis of \gls{insuml}, the inspection instrument provides
+transferable insights for designing \gls{ml} interfaces for non-expert users.
+Three design decisions prove particularly consequential and are articulated
+here as reusable \gls{hci} principles.
+
+First, \emph{sequential tab-based navigation} structures interaction as a
+guided progression through pipeline phases, exposing only decisions relevant
+to each step, with bidirectional access to revisit and revise earlier choices.
+This reduces cognitive load without sacrificing configurability, and its
+consistent ease-of-use scores of 1.00 across most phases confirm it as a
+reliable model for complex, multi-step \gls{ml} workflows.
+
 Second, \emph{explicit responsibility allocation} --- making visible which
-decisions are made by the user and which are handled automatically by the
-system --- directly supports information interpretability. The pre-training
-configuration summary exemplifies this principle: rather than leaving the
-boundary between user configuration and automated execution implicit, it
-exposes every pending automated decision as an inspectable checkpoint,
-allowing the user to review and correct the system's choices before
-training begins.    
-  
+decisions belong to the user and which are automated --- directly supports
+interpretability. The pre-training configuration summary exemplifies this:
+it exposes every pending automated decision as an inspectable checkpoint,
+allowing the user to review and correct the system's choices before training.
+
 Third, \emph{modular architectural separation} between the interface,
-core logic and \gls{automl} layers carries implications beyond technical
-maintainability. By keeping the translation between user intentions and
-technical parameters explicit and traceable, this separation decouples
-the user experience from the underlying engine, allowing the \gls{automl}
-backend to evolve independently without disrupting the interaction model.    
-  
-\subsection{Limitations and Future Work}    
-  
-The application presented in this work is not without limitations. The
-Compliance Matrix scores were assigned by the authors of the tool itself,
-which may compromise the objectivity of the assessment in ways that an
-independent auditor would not replicate. Formal reliability studies
-involving three to five independent domain experts applying the matrix
-to the same tool would strengthen the instrument's reproducibility and
-constitute a natural next step toward its consolidation as a
-general-purpose inspection instrument for \gls{hgml} tools.
-Consequently, the results presented here should be interpreted as an
-illustrative application of the instrument rather than as evidence of
-its formal validity.
-  
-Additionally, the current work lacks empirical usability studies with
-actual domain specialists performing realistic modeling tasks, measuring
-metrics such as task completion time, error rates and user satisfaction.
-Such studies, conducted following established \gls{hci} research methods
-\cite{lazar2017research}, would complement the structural inspection
-presented here and provide evidence on whether the design decisions
-identified as beneficial translate into measurable improvements in user
-performance and experience.
-  
-Finally, \gls{insuml}'s current explainability capabilities are limited    
-to global performance metrics and confusion matrices. Incorporating    
-\gls{xai} techniques such as \gls{shap} or \gls{lime}    
-\cite{salih2025perspective} would considerably enrich the model    
-interpretation phase, enabling users to understand which variables    
-contribute to individual predictions and why. The absence of parameter    
-comparison functionality in the current version further limits the    
-tool's capacity for systematic experimentation; implementing this phase    
-constitutes a concrete development priority alongside the incorporation    
-of \gls{xai} techniques. Extending the tool toward larger-scale datasets    
-and heterogeneous data sources --- text, images, time series --- would    
-further broaden its real-world applicability while maintaining the    
-human-centered design principles that articulate its development.  
+core logic and \gls{automl} layers carries implications beyond maintainability.
+Keeping the translation between user intentions and technical parameters
+traceable decouples the user experience from the underlying engine, allowing
+the \gls{automl} backend to evolve without disrupting the interaction model.
+
+\subsection{Limitations and Future Work}
+
+The application presented in this work is not without limitations. Compliance Matrix scores were assigned by the tool's own authors, which may
+compromise objectivity. Reliability studies involving three to five
+independent domain experts would strengthen reproducibility and constitute
+a natural step toward consolidating the instrument for general \gls{hgml}
+evaluation. Results should therefore be interpreted as illustrative rather
+than as evidence of formal validity.
+
+The work also lacks empirical usability studies with domain specialists
+performing realistic tasks and measuring completion time, error rates and
+satisfaction. Such studies, following established \gls{hci}
+methods~\cite{lazar2017research}, would complement the structural inspection
+and provide evidence on whether identified design decisions yield measurable
+improvements in user performance.
+
+Finally, \gls{insuml}'s explainability is currently limited to global
+performance metrics and confusion matrices. Incorporating \gls{xai}
+techniques such as \gls{shap} or \gls{lime}~\cite{salih2025perspective}
+would enrich model interpretation, enabling users to understand which
+variables drive individual predictions. The absence of parameter comparison
+further limits systematic experimentation; implementing it constitutes a
+concrete priority alongside \gls{xai} integration. Extending the tool to
+larger datasets and heterogeneous sources --- text, images, time series ---
+would broaden real-world applicability while preserving its human-centered
+design principles.
   
   
 \section{\uppercase{Conclusions}}  
@@ -670,7 +650,7 @@ execution, and accessible result visualizations that enable domain experts
 to evaluate model outputs without statistical expertise. The primary gaps  
 identified concern pipeline configurability during model development  
 phases and the absence of parameter comparison functionality in the  
-current version of the tool. 
+current version of the tool.
   
 From the \gls{hci} perspective, this work illustrates that interface design  
 for \gls{ml} systems is a determining factor for effective and responsible  
